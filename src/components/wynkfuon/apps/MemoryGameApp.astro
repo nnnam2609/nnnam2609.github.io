@@ -1,0 +1,57 @@
+---
+const cards = [
+  { id: 'star-a', pair: 'star', symbol: '✦', label: 'Star' },
+  { id: 'moon-a', pair: 'moon', symbol: '☾', label: 'Moon' },
+  { id: 'camera-a', pair: 'camera', symbol: '▣', label: 'Camera' },
+  { id: 'coffee-a', pair: 'coffee', symbol: '♨', label: 'Warm drink' },
+  { id: 'star-b', pair: 'star', symbol: '✦', label: 'Star' },
+  { id: 'moon-b', pair: 'moon', symbol: '☾', label: 'Moon' },
+  { id: 'camera-b', pair: 'camera', symbol: '▣', label: 'Camera' },
+  { id: 'coffee-b', pair: 'coffee', symbol: '♨', label: 'Warm drink' },
+];
+---
+
+<div class="memory-game-app" data-memory-game>
+  <div class="app-heading">
+    <div>
+      <p class="app-kicker">Memory Game.exe</p>
+      <h3>Recover matching files</h3>
+    </div>
+    <div class="game-counter" aria-live="polite">Moves: <strong data-game-moves>0</strong></div>
+  </div>
+
+  <p class="game-instructions" id="game-instructions">
+    Find all four pairs. Select a card with touch, click, or the Enter key.
+  </p>
+
+  <div class="game-grid" aria-describedby="game-instructions" data-game-grid>
+    {
+      cards.map((card) => (
+        <button
+          class="game-card"
+          type="button"
+          data-game-card
+          data-card-id={card.id}
+          data-pair={card.pair}
+          aria-label="Hidden memory card"
+          aria-pressed="false"
+        >
+          <span class="game-card__back" aria-hidden="true">
+            ?
+          </span>
+          <span class="game-card__face" aria-hidden="true">
+            <span>{card.symbol}</span>
+            <small>{card.label}</small>
+          </span>
+        </button>
+      ))
+    }
+  </div>
+
+  <div class="game-footer">
+    <p data-game-status aria-live="polite">4 pairs are hiding.</p>
+    <button class="icon-text-button" type="button" data-game-restart>
+      <span aria-hidden="true">↻</span> Restart game
+    </button>
+  </div>
+</div>

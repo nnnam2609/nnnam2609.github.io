@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="800" viewBox="0 0 1200 800" role="img" aria-labelledby="title desc">
+  <title id="title">Memory image placeholder</title>
+  <desc id="desc">A soft purple placeholder with stars and a space reserved for a photo.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" x2="1" y1="0" y2="1">
+      <stop offset="0" stop-color="#2b2551"/>
+      <stop offset="1" stop-color="#655386"/>
+    </linearGradient>
+    <pattern id="grid" width="48" height="48" patternUnits="userSpaceOnUse">
+      <path d="M48 0H0V48" fill="none" stroke="#fff" stroke-opacity=".05"/>
+    </pattern>
+  </defs>
+  <rect width="1200" height="800" fill="url(#bg)"/>
+  <rect width="1200" height="800" fill="url(#grid)"/>
+  <path d="M173 191l14 35 36 14-36 14-14 36-14-36-36-14 36-14 14-35zm872 372l10 26 27 11-27 10-10 27-11-27-26-10 26-11 11-26z" fill="#fff08a" opacity=".85"/>
+  <path d="M941 151c-26-38-91-15-78 32 8 28 47 53 78 80 31-27 70-52 78-80 13-47-52-70-78-32z" fill="none" stroke="#ffb6d8" stroke-width="8"/>
+  <rect x="247" y="184" width="706" height="432" rx="14" fill="#15122f" fill-opacity=".52" stroke="#d9cbff" stroke-dasharray="18 15" stroke-width="4"/>
+  <text x="600" y="370" fill="#fff7dc" font-family="ui-monospace, monospace" font-size="42" font-weight="700" text-anchor="middle">YOUR MEMORY GOES HERE</text>
+  <text x="600" y="427" fill="#c9bde5" font-family="ui-monospace, monospace" font-size="24" text-anchor="middle">replace this file or update memories.ts</text>
+</svg>

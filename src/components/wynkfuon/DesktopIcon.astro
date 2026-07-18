@@ -1,0 +1,29 @@
+---
+interface Props {
+  id: string;
+  label: string;
+  glyph: string;
+  kind?: 'folder' | 'file' | 'app' | 'secret';
+}
+
+const { id, label, glyph, kind = 'app' } = Astro.props;
+---
+
+<button
+  class:list={['desktop-icon', `desktop-icon--${kind}`, { 'is-locked': kind === 'secret' }]}
+  type="button"
+  data-app-launch={id}
+  aria-label={kind === 'secret' ? `${label}, locked` : `Open ${label}`}
+>
+  <span class="desktop-icon__art" aria-hidden="true">
+    <span class="desktop-icon__glyph">{glyph}</span>
+    {
+      kind === 'secret' && (
+        <span class="desktop-icon__lock" data-secret-lock>
+          ▣
+        </span>
+      )
+    }
+  </span>
+  <span class="desktop-icon__label">{label}</span>
+</button>

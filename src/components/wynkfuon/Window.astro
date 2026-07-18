@@ -1,0 +1,53 @@
+---
+interface Props {
+  id: string;
+  title: string;
+  glyph: string;
+  position?: { x: string; y: string };
+  size?: 'standard' | 'wide';
+}
+
+const { id, title, glyph, position = { x: '8%', y: '9%' }, size = 'standard' } = Astro.props;
+---
+
+<section
+  class:list={['app-window', `app-window--${size}`]}
+  style={`--window-x: ${position.x}; --window-y: ${position.y};`}
+  data-window={id}
+  role="dialog"
+  aria-modal="false"
+  aria-labelledby={`${id}-window-title`}
+  tabindex="-1"
+  hidden
+>
+  <header class="window-titlebar" data-drag-handle>
+    <div class="window-title">
+      <span aria-hidden="true">{glyph}</span>
+      <h2 id={`${id}-window-title`}>{title}</h2>
+    </div>
+    <div class="window-actions">
+      <button
+        class="window-control"
+        type="button"
+        data-window-minimize={id}
+        aria-label={`Minimize ${title}`}
+      >
+        <span aria-hidden="true">—</span>
+      </button>
+      <button
+        class="window-control window-control--close"
+        type="button"
+        data-window-close={id}
+        aria-label={`Close ${title}`}
+      >
+        <span aria-hidden="true">×</span>
+      </button>
+    </div>
+  </header>
+  <div class="window-body">
+    <slot />
+  </div>
+  <footer class="window-statusbar" aria-hidden="true">
+    <span>WYNKFUON_OS</span><span>● online</span>
+  </footer>
+</section>

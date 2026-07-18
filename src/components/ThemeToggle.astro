@@ -1,0 +1,72 @@
+<button class="theme-toggle" type="button" aria-label="Switch color theme" aria-pressed="false">
+  <svg aria-hidden="true" viewBox="0 0 24 24" width="18" height="18">
+    <path
+      d="M12 3v2m0 14v2M3 12h2m14 0h2M5.64 5.64l1.42 1.42m9.88 9.88 1.42 1.42m0-12.72-1.42 1.42M7.06 16.94l-1.42 1.42"
+    ></path>
+    <circle cx="12" cy="12" r="4"></circle>
+  </svg>
+  <span>Theme</span>
+</button>
+
+<script>
+  const toggle = document.querySelector<HTMLButtonElement>('.theme-toggle');
+
+  function currentTheme() {
+    return document.documentElement.dataset.theme === 'dark' ? 'dark' : 'light';
+  }
+
+  function updateToggle() {
+    if (!toggle) return;
+    const isDark = currentTheme() === 'dark';
+    toggle.setAttribute('aria-pressed', String(isDark));
+    toggle.setAttribute('aria-label', `Switch to ${isDark ? 'light' : 'dark'} theme`);
+  }
+
+  updateToggle();
+  toggle?.addEventListener('click', () => {
+    const nextTheme = currentTheme() === 'dark' ? 'light' : 'dark';
+    document.documentElement.dataset.theme = nextTheme;
+    localStorage.setItem('theme', nextTheme);
+    updateToggle();
+  });
+</script>
+
+<style>
+  .theme-toggle {
+    display: inline-flex;
+    min-height: 44px;
+    padding: 0.5rem 0.7rem;
+    gap: 0.4rem;
+    align-items: center;
+    border: 1px solid var(--line);
+    border-radius: 7px;
+    background: transparent;
+    color: var(--ink);
+    cursor: pointer;
+    font: inherit;
+    font-size: 0.83rem;
+    font-weight: 700;
+  }
+
+  .theme-toggle:hover {
+    border-color: var(--line-strong);
+    background: var(--accent-soft);
+  }
+
+  svg {
+    fill: none;
+    stroke: currentColor;
+    stroke-linecap: round;
+    stroke-width: 1.7;
+  }
+
+  @media (max-width: 24rem) {
+    .theme-toggle span {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+    }
+  }
+</style>

@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://nnnam2609.github.io/sitemap-index.xml

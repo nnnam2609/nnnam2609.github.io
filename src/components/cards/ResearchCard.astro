@@ -1,0 +1,111 @@
+---
+import type { CollectionEntry } from 'astro:content';
+
+interface Props {
+  research: CollectionEntry<'research'>;
+  index?: number;
+}
+
+const { research, index = 0 } = Astro.props;
+const { data } = research;
+---
+
+<article class="research-card">
+  <div class="index" aria-hidden="true">{String(index + 1).padStart(2, '0')}</div>
+  <div class="research-content">
+    <p class="eyebrow">{data.status}</p>
+    <h2>{data.title}</h2>
+    <p class="description">{data.description}</p>
+    {
+      data.methods.length > 0 && (
+        <div class="detail">
+          <h3>Methods</h3>
+          <ul class="tag-list" role="list">
+            {data.methods.map((method) => (
+              <li class="tag">{method}</li>
+            ))}
+          </ul>
+        </div>
+      )
+    }
+    {
+      data.relatedProjects.length > 0 && (
+        <div class="detail">
+          <h3>Related projects</h3>
+          <p>{data.relatedProjects.join(' · ')}</p>
+        </div>
+      )
+    }
+    {
+      data.relatedPublications.length > 0 && (
+        <div class="detail">
+          <h3>Related publications</h3>
+          <p>{data.relatedPublications.join(' · ')}</p>
+        </div>
+      )
+    }
+    {
+      data.externalUrl && (
+        <a class="text-link" href={data.externalUrl}>
+          Learn more
+        </a>
+      )
+    }
+  </div>
+</article>
+
+<style>
+  .research-card {
+    display: grid;
+    padding-block: 2rem;
+    gap: 1.25rem;
+    border-top: 1px solid var(--line);
+  }
+
+  .index {
+    color: var(--signal);
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+    font-weight: 700;
+  }
+
+  .research-content {
+    display: grid;
+    min-width: 0;
+    gap: 1rem;
+  }
+
+  h2 {
+    max-width: 24ch;
+    font-size: clamp(1.55rem, 4vw, 2.35rem);
+  }
+
+  .description {
+    max-width: 46rem;
+    color: var(--ink-soft);
+    font-size: 1.04rem;
+  }
+
+  .detail {
+    display: grid;
+    gap: 0.55rem;
+  }
+
+  .detail h3 {
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .detail p {
+    color: var(--ink-soft);
+  }
+
+  @media (min-width: 45rem) {
+    .research-card {
+      grid-template-columns: 3rem 1fr;
+      padding-block: 2.6rem;
+    }
+  }
+</style>

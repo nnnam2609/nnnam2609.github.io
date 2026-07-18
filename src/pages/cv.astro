@@ -1,0 +1,180 @@
+---
+import { getCollection } from 'astro:content';
+import { siteProfile } from '../data/site';
+import ContentLayout from '../layouts/ContentLayout.astro';
+import { getPublications } from '../utils/collections';
+import { cvPath } from '../utils/cv';
+
+const projects = (await getCollection('projects')).sort((a, b) => a.data.order - b.data.order);
+const publications = (await getPublications()).sort((a, b) => b.data.year - a.data.year);
+---
+
+<ContentLayout
+  title="Curriculum vitae"
+  description={`${siteProfile.position} in ${siteProfile.location}, working across speech processing, computer vision, and medical imaging.`}
+  eyebrow="Web CV"
+>
+  <div class="container cv-actions">
+    {
+      cvPath && (
+        <a class="button" href={cvPath}>
+          Download CV as PDF
+        </a>
+      )
+    }
+  </div>
+  <div class="container cv-layout">
+    <aside aria-label="Profile summary">
+      <dl>
+        <div>
+          <dt>Position</dt>
+          <dd>{siteProfile.position}</dd>
+        </div>
+        <div>
+          <dt>Affiliation</dt>
+          <dd>{siteProfile.affiliation}</dd>
+        </div>
+        <div>
+          <dt>Location</dt>
+          <dd>{siteProfile.location}</dd>
+        </div>
+      </dl>
+    </aside>
+    <div class="cv-sections">
+      {
+        siteProfile.researchInterests.length > 0 && (
+          <section aria-labelledby="cv-research-title">
+            <h2 id="cv-research-title">Research interests</h2>
+            <ul class="tag-list" role="list">
+              {siteProfile.researchInterests.map((interest) => (
+                <li class="tag">{interest}</li>
+              ))}
+            </ul>
+          </section>
+        )
+      }
+      {
+        publications.length > 0 && (
+          <section aria-labelledby="cv-publications-title">
+            <h2 id="cv-publications-title">Publications</h2>
+            <ol class="record-list">
+              {publications.map(({ data }) => (
+                <li>
+                  <strong>{data.title}</strong>
+                  <span>
+                    {data.venue}, {data.year}
+                  </span>
+                </li>
+              ))}
+            </ol>
+          </section>
+        )
+      }
+      {
+        projects.length > 0 && (
+          <section aria-labelledby="cv-projects-title">
+            <h2 id="cv-projects-title">Projects</h2>
+            <ol class="record-list">
+              {projects.map(({ data }) => (
+                <li>
+                  <strong>{data.name}</strong>
+                  <span>{data.summary}</span>
+                </li>
+              ))}
+            </ol>
+          </section>
+        )
+      }
+    </div>
+  </div>
+</ContentLayout>
+
+<style>
+  .cv-actions {
+    padding-top: 2rem;
+  }
+
+  .cv-actions:empty {
+    display: none;
+  }
+
+  .cv-layout {
+    display: grid;
+    padding-block: clamp(3rem, 7vw, 6rem);
+    gap: 3rem;
+  }
+
+  aside {
+    align-self: start;
+    padding: 1.25rem;
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    background: var(--paper-raised);
+  }
+
+  dl,
+  dl div {
+    display: grid;
+    gap: 0.25rem;
+  }
+
+  dl {
+    gap: 1rem;
+  }
+
+  dt {
+    color: var(--ink-soft);
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  dd {
+    margin: 0;
+  }
+
+  .cv-sections {
+    display: grid;
+    gap: 3rem;
+  }
+
+  .cv-sections section {
+    display: grid;
+    gap: 1.25rem;
+  }
+
+  .cv-sections h2 {
+    padding-bottom: 0.8rem;
+    border-bottom: 1px solid var(--line);
+    font-size: clamp(1.5rem, 3vw, 2rem);
+  }
+
+  .record-list {
+    display: grid;
+    padding-left: 1.3rem;
+    gap: 1rem;
+  }
+
+  .record-list li {
+    padding-left: 0.3rem;
+  }
+
+  .record-list strong,
+  .record-list span {
+    display: block;
+  }
+
+  .record-list span {
+    margin-top: 0.25rem;
+    color: var(--ink-soft);
+  }
+
+  @media (min-width: 54rem) {
+    .cv-layout {
+      grid-template-columns: minmax(14rem, 0.55fr) minmax(0, 1.45fr);
+      gap: clamp(3rem, 8vw, 7rem);
+    }
+  }
+</style>

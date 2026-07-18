@@ -1,0 +1,97 @@
+---
+import ContentLayout from '../../layouts/ContentLayout.astro';
+import { getPublishedNotes } from '../../utils/collections';
+
+const notes = (await getPublishedNotes()).sort(
+  (a, b) => b.data.publishedAt.valueOf() - a.data.publishedAt.valueOf(),
+);
+const dateFormatter = new Intl.DateTimeFormat('en', { dateStyle: 'medium' });
+---
+
+<ContentLayout
+  title="Notes"
+  description="Research observations, engineering notes, and working ideas—published when they are ready."
+  eyebrow="Writing"
+>
+  <section class="section" aria-label="Published notes">
+    <div class="container">
+      {
+        notes.length > 0 ? (
+          <ol class="note-list" role="list">
+            {notes.map((note) => (
+              <li>
+                <article>
+                  <div class="note-meta">
+                    <time datetime={note.data.publishedAt.toISOString()}>
+                      {dateFormatter.format(note.data.publishedAt)}
+                    </time>
+                    {note.data.readingTime && <span>{note.data.readingTime}</span>}
+                  </div>
+                  <h2>
+                    <a href={`/notes/${note.id}/`}>{note.data.title}</a>
+                  </h2>
+                  <p>{note.data.description}</p>
+                  {note.data.tags.length > 0 && (
+                    <ul class="tag-list" role="list" aria-label="Tags">
+                      {note.data.tags.map((tag) => (
+                        <li class="tag">{tag}</li>
+                      ))}
+                    </ul>
+                  )}
+                </article>
+              </li>
+            ))}
+          </ol>
+        ) : (
+          <div class="empty-state">
+            <p class="eyebrow">Notebook opening soon</p>
+            <h2>No notes have been published yet.</h2>
+            <p>
+              This space is reserved for considered research and engineering writing. Drafts stay
+              out of the production build until explicitly published.
+            </p>
+          </div>
+        )
+      }
+    </div>
+  </section>
+</ContentLayout>
+
+<style>
+  .note-list {
+    display: grid;
+  }
+
+  .note-list article {
+    display: grid;
+    padding-block: 2rem;
+    gap: 0.7rem;
+    border-top: 1px solid var(--line);
+  }
+
+  .note-list h2 {
+    font-size: clamp(1.4rem, 3vw, 2rem);
+  }
+
+  .note-list h2 a {
+    color: var(--ink);
+    text-decoration: none;
+  }
+
+  .note-list h2 a:hover {
+    color: var(--accent-strong);
+  }
+
+  .note-list article > p,
+  .note-meta {
+    color: var(--ink-soft);
+  }
+
+  .note-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem 1rem;
+    font-family: var(--font-mono);
+    font-size: 0.74rem;
+  }
+</style>

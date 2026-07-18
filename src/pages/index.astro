@@ -1,0 +1,234 @@
+---
+import { getCollection } from 'astro:content';
+import PublicationItem from '../components/cards/PublicationItem.astro';
+import FeaturedProjects from '../components/home/FeaturedProjects.astro';
+import Hero from '../components/home/Hero.astro';
+import ResearchOverview from '../components/home/ResearchOverview.astro';
+import { siteDescription, siteProfile } from '../data/site';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { getPublications } from '../utils/collections';
+
+const research = (await getCollection('research')).sort((a, b) => a.data.order - b.data.order);
+const featuredProjects = (await getCollection('projects'))
+  .filter(({ data }) => data.featured)
+  .sort((a, b) => a.data.order - b.data.order);
+const featuredPublications = (await getPublications())
+  .filter(({ data }) => data.featured)
+  .sort((a, b) => b.data.year - a.data.year);
+const contactLinks = [
+  siteProfile.email && { href: `mailto:${siteProfile.email}`, label: 'Email at LORIA' },
+  siteProfile.personalEmail && {
+    href: `mailto:${siteProfile.personalEmail}`,
+    label: 'Personal email',
+  },
+  siteProfile.github && { href: siteProfile.github, label: 'GitHub profile' },
+  siteProfile.linkedin && { href: siteProfile.linkedin, label: 'LinkedIn profile' },
+].filter(Boolean) as { href: string; label: string }[];
+---
+
+<BaseLayout description={siteDescription}>
+  <Hero />
+
+  <section class="section" aria-labelledby="about-title">
+    <div class="container about-grid">
+      <div class="section-heading">
+        <p class="eyebrow">About</p>
+        <h2 id="about-title">Research grounded in signal, image, and anatomy</h2>
+      </div>
+      <div class="bio lede">
+        {siteProfile.biography.map((paragraph) => <p>{paragraph}</p>)}
+      </div>
+    </div>
+  </section>
+
+  <ResearchOverview {research} />
+  <FeaturedProjects projects={featuredProjects} />
+
+  {
+    featuredPublications.length > 0 && (
+      <section class="section" aria-labelledby="selected-publications-title">
+        <div class="container">
+          <div class="section-heading-row">
+            <div class="section-heading">
+              <p class="eyebrow">Selected work</p>
+              <h2 id="selected-publications-title">Publications and talks</h2>
+            </div>
+            <a class="text-link" href="/publications/">
+              View all publications
+            </a>
+          </div>
+          {featuredPublications.map((publication) => (
+            <PublicationItem {publication} />
+          ))}
+        </div>
+      </section>
+    )
+  }
+
+  <section class="section" aria-labelledby="interests-title">
+    <div class="container">
+      <div class="section-heading">
+        <p class="eyebrow">Current interests</p>
+        <h2 id="interests-title">Questions I am working through</h2>
+        <p class="lede">
+          I am interested in both the research questions behind intelligent systems and the craft of
+          turning them into dependable tools.
+        </p>
+      </div>
+      <div class="interest-grid">
+        <div class="interest-panel">
+          <p class="panel-label">Research</p>
+          <ul role="list">
+            {siteProfile.researchInterests.map((interest) => <li>{interest}</li>)}
+          </ul>
+        </div>
+        <div class="interest-panel builder">
+          <p class="panel-label">Engineering</p>
+          <ul role="list">
+            {siteProfile.engineeringInterests.map((interest) => <li>{interest}</li>)}
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section contact" aria-labelledby="contact-title">
+    <div class="container contact-inner">
+      <div>
+        <p class="eyebrow">Contact</p>
+        <h2 id="contact-title">Research, software, and thoughtful collaborations</h2>
+      </div>
+      <div class="contact-copy">
+        {
+          contactLinks.length > 0 ? (
+            <>
+              <p>Use one of the verified channels below to get in touch.</p>
+              <div class="button-row">
+                {contactLinks.map(({ href, label }) => (
+                  <a class="button secondary" href={href}>
+                    {label}
+                  </a>
+                ))}
+              </div>
+            </>
+          ) : (
+            <p>
+              Verified contact links are being prepared. In the meantime, institutional contact
+              details can be found through {siteProfile.affiliation}.
+            </p>
+          )
+        }
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .about-grid,
+  .contact-inner {
+    display: grid;
+    gap: 2rem;
+  }
+
+  .bio {
+    color: var(--ink-soft);
+  }
+
+  .interest-grid {
+    display: grid;
+    gap: 1rem;
+  }
+
+  .interest-panel {
+    position: relative;
+    padding: clamp(1.4rem, 4vw, 2.25rem);
+    overflow: hidden;
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    background: var(--paper-raised);
+  }
+
+  .interest-panel::after {
+    position: absolute;
+    right: -4rem;
+    bottom: -4rem;
+    width: 10rem;
+    height: 10rem;
+    border: 1px solid var(--accent);
+    border-radius: 50%;
+    content: '';
+    opacity: 0.28;
+  }
+
+  .interest-panel.builder::after {
+    border-color: var(--signal);
+    border-radius: 0;
+    transform: rotate(35deg);
+  }
+
+  .panel-label {
+    margin-bottom: 1.25rem;
+    color: var(--accent-strong);
+    font-family: var(--font-mono);
+    font-size: 0.74rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+
+  .builder .panel-label {
+    color: var(--signal);
+  }
+
+  .interest-panel ul {
+    display: grid;
+    gap: 0.75rem;
+  }
+
+  .interest-panel li {
+    position: relative;
+    padding-left: 1.1rem;
+  }
+
+  .interest-panel li::before {
+    position: absolute;
+    top: 0.68em;
+    left: 0;
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: var(--accent);
+    content: '';
+  }
+
+  .builder li::before {
+    background: var(--signal);
+  }
+
+  .contact {
+    background: var(--accent-soft);
+  }
+
+  .contact h2 {
+    max-width: 18ch;
+  }
+
+  .contact-copy {
+    display: grid;
+    gap: 1.25rem;
+    max-width: 38rem;
+    color: var(--ink-soft);
+  }
+
+  @media (min-width: 48rem) {
+    .about-grid,
+    .contact-inner {
+      grid-template-columns: minmax(16rem, 0.75fr) minmax(24rem, 1.25fr);
+      gap: clamp(3rem, 9vw, 8rem);
+    }
+
+    .interest-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+</style>

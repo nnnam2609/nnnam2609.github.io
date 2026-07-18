@@ -1,0 +1,35 @@
+---
+import BaseLayout from './BaseLayout.astro';
+
+interface Props {
+  title: string;
+  description: string;
+  eyebrow?: string;
+  canonical?: URL | undefined;
+}
+
+const { title, description, eyebrow = 'Nhat-Nam Nguyen', canonical } = Astro.props;
+---
+
+<BaseLayout {title} {description} {canonical}>
+  <header class="page-header container">
+    <p class="eyebrow">{eyebrow}</p>
+    <h1>{title}</h1>
+    <p class="lede">{description}</p>
+  </header>
+  <slot />
+</BaseLayout>
+
+<style>
+  .page-header {
+    display: grid;
+    padding-block: clamp(4rem, 11vw, 8rem) clamp(3.25rem, 8vw, 6rem);
+    gap: 1.15rem;
+    border-bottom: 1px solid var(--line);
+  }
+
+  h1 {
+    max-width: 16ch;
+    font-size: clamp(2.6rem, 8vw, 5.3rem);
+  }
+</style>

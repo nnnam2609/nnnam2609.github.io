@@ -588,6 +588,7 @@ import IntroScreen from './IntroScreen.astro';
   shell.querySelector<HTMLButtonElement>('#skip-boot')?.addEventListener('click', finishBoot);
   shell.querySelector<HTMLButtonElement>('#open-final-letter')?.addEventListener('click', () => {
     pauseVideos();
+    shell.querySelectorAll<HTMLDialogElement>('dialog[open]').forEach((dialog) => dialog.close());
     showScreen('final');
     shell.querySelector<HTMLElement>('[data-final-letter]')?.focus({ preventScroll: true });
   });

@@ -1,0 +1,78 @@
+---
+import { siteProfile } from '../../data/site';
+import ThemeToggle from '../ThemeToggle.astro';
+import Navigation from './Navigation.astro';
+
+interface Props {
+  pathname: string;
+}
+
+const { pathname } = Astro.props;
+---
+
+<header class="site-header">
+  <div class="container header-inner">
+    <a class="identity" href="/" aria-label={`${siteProfile.name}, home`}>
+      <span class="monogram" aria-hidden="true">NN</span>
+      <span>{siteProfile.name}</span>
+    </a>
+    <div class="header-actions">
+      <Navigation {pathname} />
+      <ThemeToggle />
+    </div>
+  </div>
+</header>
+
+<style>
+  .site-header {
+    position: relative;
+    z-index: 30;
+    border-bottom: 1px solid var(--line);
+    background: color-mix(in srgb, var(--paper) 92%, transparent);
+    backdrop-filter: blur(12px);
+  }
+
+  .header-inner {
+    display: flex;
+    min-height: 72px;
+    gap: 1rem;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .identity {
+    display: inline-flex;
+    min-height: 44px;
+    gap: 0.65rem;
+    align-items: center;
+    color: var(--ink);
+    font-size: 0.9rem;
+    font-weight: 750;
+    text-decoration: none;
+  }
+
+  .monogram {
+    display: grid;
+    width: 36px;
+    height: 36px;
+    border-radius: 7px;
+    background: var(--ink);
+    color: var(--paper-raised);
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    letter-spacing: -0.08em;
+    place-items: center;
+  }
+
+  .header-actions {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+  }
+
+  @media (max-width: 30rem) {
+    .identity > span:last-child {
+      display: none;
+    }
+  }
+</style>

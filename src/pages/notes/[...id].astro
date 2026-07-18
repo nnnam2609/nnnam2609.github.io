@@ -1,0 +1,58 @@
+---
+import { render, type CollectionEntry } from 'astro:content';
+import ContentLayout from '../../layouts/ContentLayout.astro';
+import { getPublishedNotes } from '../../utils/collections';
+
+export async function getStaticPaths() {
+  const notes = await getPublishedNotes();
+  return notes.map((note) => ({ params: { id: note.id }, props: { note } }));
+}
+
+interface Props {
+  note: CollectionEntry<'notes'>;
+}
+
+const { note } = Astro.props;
+const { Content } = await render(note);
+const canonical = note.data.canonicalUrl ? new URL(note.data.canonicalUrl) : undefined;
+---
+
+<ContentLayout
+  title={note.data.title}
+  description={note.data.description}
+  eyebrow="Note"
+  {canonical}
+>
+  <article class="section">
+    <div class="container prose">
+      <div class="note-details">
+        <time datetime={note.data.publishedAt.toISOString()}>
+          Published {note.data.publishedAt.toLocaleDateString('en', { dateStyle: 'long' })}
+        </time>
+        {
+          note.data.updatedAt && (
+            <time datetime={note.data.updatedAt.toISOString()}>
+              Updated {note.data.updatedAt.toLocaleDateString('en', { dateStyle: 'long' })}
+            </time>
+          )
+        }
+        {note.data.readingTime && <span>{note.data.readingTime}</span>}
+      </div>
+      <Content />
+    </div>
+  </article>
+</ContentLayout>
+
+<style>
+  .note-details {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem 1.2rem;
+    padding-bottom: 1.25rem;
+    border-bottom: 1px solid var(--line);
+    margin-bottom: 2rem;
+    color: var(--ink-soft);
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+  }
+</style>

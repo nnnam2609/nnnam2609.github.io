@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" role="img" aria-labelledby="title description">
+  <title id="title">Nhat-Nam Nguyen — researcher and software builder</title>
+  <desc id="description">Abstract waveform, vocal-tract contour, and coordinate grid motifs.</desc>
+  <rect width="1200" height="630" fill="#f5f1e8"/>
+  <g stroke="#cbd5d7" stroke-width="1" opacity=".55">
+    <path d="M0 90h1200M0 180h1200M0 270h1200M0 360h1200M0 450h1200M0 540h1200"/>
+    <path d="M100 0v630M200 0v630M300 0v630M400 0v630M500 0v630M600 0v630M700 0v630M800 0v630M900 0v630M1000 0v630M1100 0v630"/>
+  </g>
+  <g fill="none" stroke="#2f7f86" stroke-linecap="round">
+    <path d="M70 180c58 0 58-54 116-54s58 108 116 108 58-76 116-76 58 44 116 44 58-18 116-18" stroke-width="8"/>
+    <path d="M750 100c152 13 279 114 299 245 13 87-35 165-117 184-87 21-177-30-186-100-8-62 52-108 118-91 56 15 67 82 21 112" stroke="#102a43" stroke-width="5"/>
+    <path d="M788 128c116 26 204 104 216 202 8 62-25 117-84 131-50 12-99-10-119-48" stroke-width="3" opacity=".65"/>
+  </g>
+  <circle cx="1050" cy="345" r="9" fill="#d26a47"/>
+  <text x="70" y="390" fill="#102a43" font-family="system-ui, sans-serif" font-size="72" font-weight="700">Nhat-Nam Nguyen</text>
+  <text x="72" y="452" fill="#38576a" font-family="system-ui, sans-serif" font-size="28">AI · speech · computer vision · research software</text>
+  <text x="72" y="550" fill="#2f7f86" font-family="ui-monospace, monospace" font-size="20" letter-spacing="3">RESEARCHER / BUILDER</text>
+</svg>
+

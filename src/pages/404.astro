@@ -1,0 +1,48 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout title="Page not found" description="The requested page could not be found.">
+  <section class="not-found container">
+    <div class="error-code" aria-hidden="true">404</div>
+    <p class="eyebrow">Off the grid</p>
+    <h1>That page is not here.</h1>
+    <p class="lede">
+      The address may have changed, or the page may not exist. The main research and project pages
+      are still available.
+    </p>
+    <div class="button-row">
+      <a class="button" href="/">Return home</a>
+      <a class="button secondary" href="/research/">View research</a>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .not-found {
+    position: relative;
+    display: grid;
+    min-height: 65vh;
+    padding-block: clamp(5rem, 14vw, 10rem);
+    gap: 1.25rem;
+    align-content: center;
+    overflow: hidden;
+  }
+
+  .not-found h1 {
+    max-width: 12ch;
+  }
+
+  .error-code {
+    position: absolute;
+    z-index: -1;
+    top: 50%;
+    right: 0;
+    color: var(--accent-soft);
+    font-family: var(--font-mono);
+    font-size: clamp(8rem, 30vw, 24rem);
+    font-weight: 800;
+    line-height: 0.7;
+    transform: translateY(-50%);
+  }
+</style>

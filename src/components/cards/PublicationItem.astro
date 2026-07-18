@@ -1,0 +1,77 @@
+---
+import type { CollectionEntry } from 'astro:content';
+
+interface Props {
+  publication: CollectionEntry<'publications'>;
+}
+
+const { publication } = Astro.props;
+const { data } = publication;
+---
+
+<article class="publication-item">
+  <div class="publication-year">{data.year}</div>
+  <div class="publication-copy">
+    <p class="eyebrow">{data.type}</p>
+    <h2>{data.title}</h2>
+    <p>{data.authors.join(', ')}</p>
+    <p class="venue">{data.venue}</p>
+    {data.abstract && <p class="abstract">{data.abstract}</p>}
+    {
+      (data.paperUrl || data.codeUrl || data.slidesUrl || data.doi) && (
+        <div class="publication-links">
+          {data.paperUrl && <a href={data.paperUrl}>Paper</a>}
+          {data.codeUrl && <a href={data.codeUrl}>Code</a>}
+          {data.slidesUrl && <a href={data.slidesUrl}>Slides</a>}
+          {data.doi && <span>DOI: {data.doi}</span>}
+        </div>
+      )
+    }
+  </div>
+</article>
+
+<style>
+  .publication-item {
+    display: grid;
+    padding-block: 2rem;
+    gap: 1rem;
+    border-top: 1px solid var(--line);
+  }
+
+  .publication-year {
+    color: var(--signal);
+    font-family: var(--font-mono);
+    font-size: 0.82rem;
+    font-weight: 700;
+  }
+
+  .publication-copy {
+    display: grid;
+    min-width: 0;
+    gap: 0.55rem;
+  }
+
+  h2 {
+    overflow-wrap: anywhere;
+    font-size: clamp(1.25rem, 3vw, 1.75rem);
+  }
+
+  .venue,
+  .abstract {
+    color: var(--ink-soft);
+  }
+
+  .publication-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem 1rem;
+    font-size: 0.85rem;
+    overflow-wrap: anywhere;
+  }
+
+  @media (min-width: 42rem) {
+    .publication-item {
+      grid-template-columns: 5rem 1fr;
+    }
+  }
+</style>

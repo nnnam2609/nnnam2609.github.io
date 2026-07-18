@@ -1,0 +1,97 @@
+---
+import Header from '../components/layout/Header.astro';
+import Footer from '../components/layout/Footer.astro';
+import { siteDescription, siteProfile } from '../data/site';
+import '../styles/global.css';
+
+interface Props {
+  title?: string;
+  description?: string;
+  image?: string;
+  canonical?: URL | undefined;
+}
+
+const {
+  title,
+  description = siteDescription,
+  image = '/og-default.svg',
+  canonical = new URL(Astro.url.pathname, Astro.site),
+} = Astro.props;
+const pageTitle = title
+  ? `${title} · ${siteProfile.name}`
+  : `${siteProfile.name} · Researcher & Builder`;
+const socialLinks = [
+  siteProfile.github,
+  siteProfile.linkedin,
+  siteProfile.scholar,
+  siteProfile.orcid,
+].filter((value): value is string => Boolean(value));
+const personSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'Person',
+  name: siteProfile.name,
+  alternateName: siteProfile.shortName,
+  jobTitle: siteProfile.position,
+  url: new URL('/', Astro.site).href,
+  homeLocation: {
+    '@type': 'Place',
+    name: siteProfile.location,
+  },
+  affiliation: {
+    '@type': 'Organization',
+    name: siteProfile.affiliation,
+  },
+  knowsAbout: [...siteProfile.researchInterests, ...siteProfile.engineeringInterests],
+  ...(siteProfile.email ? { email: siteProfile.email } : {}),
+  ...(socialLinks.length > 0 ? { sameAs: socialLinks } : {}),
+};
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width" />
+    <meta name="generator" content={Astro.generator} />
+    <meta name="description" content={description} />
+    <meta name="theme-color" content="#f6f3ec" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="canonical" href={canonical} />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content={siteProfile.name} />
+    <meta property="og:title" content={pageTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={new URL(image, Astro.site)} />
+    <meta
+      property="og:image:alt"
+      content="Abstract waveforms and vocal-tract contour lines for Nhat-Nam Nguyen"
+    />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={pageTitle} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={new URL(image, Astro.site)} />
+    <title>{pageTitle}</title>
+    <script is:inline>
+      (() => {
+        try {
+          const saved = localStorage.getItem('theme');
+          const preferred = matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+          document.documentElement.dataset.theme =
+            saved === 'dark' || saved === 'light' ? saved : preferred;
+        } catch {
+          // The CSS color-scheme fallback still applies when storage is unavailable.
+        }
+      })();
+    </script>
+    <script is:inline type="application/ld+json" set:html={JSON.stringify(personSchema)} />
+  </head>
+  <body>
+    <a class="skip-link" href="#main-content">Skip to content</a>
+    <Header pathname={Astro.url.pathname} />
+    <main id="main-content">
+      <slot />
+    </main>
+    <Footer />
+  </body>
+</html>

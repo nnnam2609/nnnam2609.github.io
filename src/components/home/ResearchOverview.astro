@@ -1,0 +1,85 @@
+---
+import type { CollectionEntry } from 'astro:content';
+
+interface Props {
+  research: CollectionEntry<'research'>[];
+}
+
+const { research } = Astro.props;
+---
+
+<section class="section" aria-labelledby="research-overview-title">
+  <div class="container research-layout">
+    <div class="section-heading">
+      <p class="eyebrow">Research focus</p>
+      <h2 id="research-overview-title">From acoustic signals to articulatory motion</h2>
+      <p class="lede">
+        My work connects speech, images, and anatomy to study how vocal-tract movement can be
+        reconstructed across speakers.
+      </p>
+      <a class="text-link" href="/research/">Explore the research programme</a>
+    </div>
+    <ol class="focus-list" role="list">
+      {
+        research.map(({ data }, index) => (
+          <li>
+            <span>{String(index + 1).padStart(2, '0')}</span>
+            <div>
+              <h3>{data.title}</h3>
+              <p>{data.description}</p>
+            </div>
+          </li>
+        ))
+      }
+    </ol>
+  </div>
+</section>
+
+<style>
+  .research-layout {
+    display: grid;
+    gap: 3rem;
+  }
+
+  .focus-list {
+    border-bottom: 1px solid var(--line);
+  }
+
+  .focus-list li {
+    display: grid;
+    padding-block: 1.35rem;
+    gap: 1rem;
+    border-top: 1px solid var(--line);
+    grid-template-columns: 2rem 1fr;
+  }
+
+  .focus-list li > span {
+    color: var(--signal);
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    font-weight: 700;
+  }
+
+  .focus-list div {
+    display: grid;
+    gap: 0.45rem;
+  }
+
+  .focus-list p {
+    color: var(--ink-soft);
+    font-size: 0.91rem;
+  }
+
+  @media (min-width: 58rem) {
+    .research-layout {
+      grid-template-columns: minmax(18rem, 0.82fr) minmax(28rem, 1.18fr);
+      gap: clamp(4rem, 9vw, 8rem);
+    }
+
+    .section-heading {
+      position: sticky;
+      top: 2rem;
+      align-self: start;
+    }
+  }
+</style>

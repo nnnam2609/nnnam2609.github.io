@@ -1715,10 +1715,9 @@
     background: linear-gradient(rgb(106 77 102 / 6%) 1px, transparent 1px), #fffaf0;
     background-size: 100% 1.75rem;
     color: #4b3d4c;
-    font-family: Georgia, 'Times New Roman', serif;
+    font-family: Cambria, 'Times New Roman', serif;
     font-size: clamp(0.95rem, 2vw, 1.08rem);
     line-height: 1.75;
-    transform: rotate(0.6deg);
   }
 
   .final-letter p + p {
@@ -1728,7 +1727,7 @@
   .letter-salutation,
   .letter-signoff {
     color: #7c3e5c;
-    font-family: cursive;
+    font-family: 'Segoe Print', 'Segoe UI', sans-serif;
     font-size: 1.15em;
   }
 

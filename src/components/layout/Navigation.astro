@@ -25,7 +25,7 @@ const isActive = (href: string) => (href === '/' ? pathname === '/' : pathname.s
 
 <nav class="mobile-nav" aria-label="Mobile navigation">
   <details>
-    <summary>
+    <summary aria-expanded="false" data-mobile-summary>
       <span>Menu</span>
       <svg aria-hidden="true" viewBox="0 0 16 16" width="16" height="16">
         <path d="m3 6 5 5 5-5"></path>
@@ -44,6 +44,19 @@ const isActive = (href: string) => (href === '/' ? pathname === '/' : pathname.s
     </ul>
   </details>
 </nav>
+
+<script>
+  document.querySelectorAll<HTMLDetailsElement>('.mobile-nav details').forEach((details) => {
+    const summary = details.querySelector<HTMLElement>('[data-mobile-summary]');
+    const updateState = () => summary?.setAttribute('aria-expanded', String(details.open));
+
+    details.addEventListener('toggle', updateState);
+    details
+      .querySelectorAll('a')
+      .forEach((link) => link.addEventListener('click', () => details.removeAttribute('open')));
+    updateState();
+  });
+</script>
 
 <style>
   details {

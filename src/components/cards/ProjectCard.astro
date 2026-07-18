@@ -1,5 +1,6 @@
 ---
 import type { CollectionEntry } from 'astro:content';
+import ProjectVisual from '../home/ProjectVisual.astro';
 
 interface Props {
   project: CollectionEntry<'projects'>;
@@ -13,42 +14,42 @@ const dateRange = data.startYear
 ---
 
 <article class="project-card">
-  <div class="card-meta">
-    <span class:list={['type', data.type]}>{data.type}</span>
-    {dateRange && <span>{dateRange}</span>}
+  <ProjectVisual projectId={project.id} />
+  <div class="card-body">
+    <div class="card-meta">
+      <span class:list={['type', data.type]}>{data.type}</span>
+      {dateRange && <span>{dateRange}</span>}
+    </div>
+    <div class="card-copy">
+      <h3>{data.name}</h3>
+      <p>{data.summary}</p>
+    </div>
+    <p class="status"><span aria-hidden="true"></span>{data.status}</p>
+    {
+      data.technologies.length > 0 && (
+        <ul class="tag-list" role="list" aria-label="Research methods">
+          {data.technologies.map((technology) => (
+            <li class="tag">{technology}</li>
+          ))}
+        </ul>
+      )
+    }
+    {
+      (data.repositoryUrl || data.demoUrl) && (
+        <div class="card-links">
+          {data.repositoryUrl && <a href={data.repositoryUrl}>View repository</a>}
+          {data.demoUrl && <a href={data.demoUrl}>Open demo</a>}
+        </div>
+      )
+    }
   </div>
-  <div class="card-copy">
-    <h3>{data.name}</h3>
-    <p>{data.summary}</p>
-  </div>
-  <p class="status"><span aria-hidden="true"></span>{data.status}</p>
-  {
-    data.technologies.length > 0 && (
-      <ul class="tag-list" role="list" aria-label="Technologies">
-        {data.technologies.map((technology) => (
-          <li class="tag">{technology}</li>
-        ))}
-      </ul>
-    )
-  }
-  {
-    (data.repositoryUrl || data.demoUrl) && (
-      <div class="card-links">
-        {data.repositoryUrl && <a href={data.repositoryUrl}>View repository</a>}
-        {data.demoUrl && <a href={data.demoUrl}>Open demo</a>}
-      </div>
-    )
-  }
 </article>
 
 <style>
   .project-card {
-    display: grid;
     min-width: 0;
     min-height: 100%;
-    padding: 1.35rem;
-    gap: 1.15rem;
-    align-content: start;
+    overflow: hidden;
     border: 1px solid var(--line);
     border-radius: var(--radius);
     background: var(--paper-raised);
@@ -57,6 +58,14 @@ const dateRange = data.startYear
       border-color 160ms ease,
       transform 160ms ease,
       box-shadow 160ms ease;
+  }
+
+  .card-body {
+    display: grid;
+    min-height: 18rem;
+    padding: 1.35rem;
+    gap: 1.15rem;
+    align-content: start;
   }
 
   .project-card:hover {

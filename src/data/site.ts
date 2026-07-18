@@ -19,13 +19,12 @@ export interface SiteProfile {
 export const siteProfile: SiteProfile = {
   name: 'Nhat-Nam Nguyen',
   shortName: 'Nam',
-  headline: 'PhD Researcher in AI, Speech, and Computer Vision',
+  headline: 'PhD Researcher in Speech, Computer Vision, and Articulatory AI',
   position: 'PhD Researcher',
   location: 'Nancy, France',
-  affiliation: 'Université de Lorraine, LORIA, Multispeech',
+  affiliation: 'Université de Lorraine · LORIA · Multispeech',
   biography: [
-    'I am a PhD researcher in Nancy, France, working at the intersection of speech processing, computer vision, and medical imaging. My research focuses on speaker-independent acoustic-to-articulatory inversion of the full vocal tract using real-time MRI, segmentation, speaker normalization, and self-supervised learning.',
-    'Alongside my research, I build practical software systems and explore how advanced AI techniques can become useful, focused products.',
+    'I develop AI systems that infer vocal-tract articulation from speech, combining audio modelling, computer vision, real-time MRI, anatomical normalization, and self-supervised learning.',
   ],
   researchInterests: [
     'Speech processing',
@@ -59,4 +58,4 @@ export const navigation = [
 ] as const;
 
 export const siteDescription =
-  'Research and software by Nhat-Nam Nguyen, a PhD researcher working across speech processing, computer vision, medical imaging, and practical AI systems.';
+  'From sound to shape: research by Nhat-Nam Nguyen across speech processing, computer vision, real-time MRI, vocal-tract modelling, and articulatory AI.';

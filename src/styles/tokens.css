@@ -1,52 +1,54 @@
 :root {
   color-scheme: light;
-  --paper: #f6f3ec;
-  --paper-raised: #fffdf8;
-  --ink: #132d3b;
-  --ink-soft: #48616d;
-  --accent: #25727a;
-  --accent-strong: #155a63;
-  --accent-soft: #dcebec;
-  --signal: #bc5b3c;
-  --line: #ced9d8;
-  --line-strong: #9eb5b5;
-  --shadow: 0 16px 44px rgb(26 61 70 / 8%);
-  --radius: 12px;
-  --content: 73rem;
+  --paper: #f4f2ec;
+  --paper-raised: #fcfbf7;
+  --ink: #102832;
+  --ink-soft: #526a72;
+  --accent: #34858c;
+  --accent-strong: #17646d;
+  --accent-soft: #dcebed;
+  --signal: #c46443;
+  --line: #d2dcda;
+  --line-strong: #9eb4b3;
+  --shadow-color: rgb(16 40 50 / 10%);
+  --shadow: 0 18px 52px var(--shadow-color);
+  --radius: 14px;
+  --content: 78rem;
   --measure: 45rem;
-  --font-sans:
-    Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --font-sans: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
   --font-mono: 'SFMono-Regular', Consolas, 'Liberation Mono', monospace;
 }
 
 [data-theme='dark'] {
   color-scheme: dark;
-  --paper: #0d1c24;
-  --paper-raised: #132630;
+  --paper: #0d1d24;
+  --paper-raised: #132830;
   --ink: #eef5f2;
-  --ink-soft: #abc0c3;
-  --accent: #70bec1;
-  --accent-strong: #99d6d8;
-  --accent-soft: #193a42;
-  --signal: #e58c69;
-  --line: #2c4650;
-  --line-strong: #496873;
-  --shadow: 0 20px 50px rgb(0 0 0 / 22%);
+  --ink-soft: #a9bec1;
+  --accent: #6dbcc0;
+  --accent-strong: #9ad5d7;
+  --accent-soft: #193b43;
+  --signal: #e38b69;
+  --line: #2b4650;
+  --line-strong: #4b6972;
+  --shadow-color: rgb(0 0 0 / 28%);
+  --shadow: 0 20px 54px var(--shadow-color);
 }
 
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme]) {
     color-scheme: dark;
-    --paper: #0d1c24;
-    --paper-raised: #132630;
+    --paper: #0d1d24;
+    --paper-raised: #132830;
     --ink: #eef5f2;
-    --ink-soft: #abc0c3;
-    --accent: #70bec1;
-    --accent-strong: #99d6d8;
-    --accent-soft: #193a42;
-    --signal: #e58c69;
-    --line: #2c4650;
-    --line-strong: #496873;
-    --shadow: 0 20px 50px rgb(0 0 0 / 22%);
+    --ink-soft: #a9bec1;
+    --accent: #6dbcc0;
+    --accent-strong: #9ad5d7;
+    --accent-soft: #193b43;
+    --signal: #e38b69;
+    --line: #2b4650;
+    --line-strong: #4b6972;
+    --shadow-color: rgb(0 0 0 / 28%);
+    --shadow: 0 20px 54px var(--shadow-color);
   }
 }

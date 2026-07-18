@@ -1,0 +1,402 @@
+<div class="sound-to-shape" data-sound-visual>
+  <svg viewBox="0 0 720 560" aria-hidden="true" focusable="false">
+    <defs>
+      <linearGradient id="visual-surface" x1="0" y1="0" x2="1" y2="1">
+        <stop offset="0" stop-color="var(--paper-raised)"></stop>
+        <stop offset="1" stop-color="var(--accent-soft)"></stop>
+      </linearGradient>
+      <filter id="visual-shadow" x="-20%" y="-20%" width="140%" height="140%">
+        <feDropShadow dx="0" dy="12" stdDeviation="18" flood-color="var(--shadow-color)"
+        ></feDropShadow>
+      </filter>
+    </defs>
+
+    <rect class="visual-surface" x="18" y="18" width="684" height="524" rx="32"></rect>
+
+    <g class="coordinate-grid">
+      <path
+        d="M70 80H650M70 140H650M70 200H650M70 260H650M70 320H650M70 380H650M70 440H650M70 500H650"
+      ></path>
+      <path
+        d="M90 58V518M150 58V518M210 58V518M270 58V518M330 58V518M390 58V518M450 58V518M510 58V518M570 58V518M630 58V518"
+      ></path>
+    </g>
+
+    <g class="background-anatomy">
+      <path d="M531 88c72 12 119 71 114 138-5 57-45 99-94 118-38 15-76 11-103-11"></path>
+      <path d="M548 115c48 12 78 51 75 96-3 39-29 69-62 83"></path>
+      <circle cx="531" cy="88" r="4"></circle>
+      <circle cx="645" cy="226" r="4"></circle>
+      <circle cx="448" cy="333" r="4"></circle>
+    </g>
+
+    <g class="state waveform-state">
+      <path
+        class="waveform"
+        d="M72 284h24l12-20 14 43 16-85 17 132 17-103 17 58 17-25h24l14-12 14 28 16-61 17 93 17-71 17 37 16-14h23"
+      ></path>
+      <g class="wave-points">
+        <circle cx="108" cy="264" r="4"></circle>
+        <circle cx="138" cy="222" r="4"></circle>
+        <circle cx="172" cy="251" r="4"></circle>
+        <circle cx="254" cy="272" r="4"></circle>
+        <circle cx="284" cy="239" r="4"></circle>
+        <circle cx="318" cy="261" r="4"></circle>
+      </g>
+      <text x="72" y="378">acoustic signal</text>
+    </g>
+
+    <g class="state latent-state">
+      <g class="latent-blocks">
+        <rect x="181" y="184" width="38" height="194" rx="8"></rect>
+        <rect x="229" y="220" width="38" height="122" rx="8"></rect>
+        <rect x="277" y="166" width="38" height="230" rx="8"></rect>
+        <rect x="325" y="205" width="38" height="152" rx="8"></rect>
+        <rect x="373" y="190" width="38" height="182" rx="8"></rect>
+        <rect x="421" y="232" width="38" height="98" rx="8"></rect>
+        <rect x="469" y="176" width="38" height="210" rx="8"></rect>
+      </g>
+      <path class="latent-axis" d="M160 408H528"></path>
+      <text x="181" y="438">learned representation</text>
+    </g>
+
+    <g class="state contour-state">
+      <g class="contour-drawing">
+        <path
+          class="contour-main"
+          d="M311 139c68-48 168-31 218 32 31 39 39 91 23 135-15 42-51 73-90 92-42 20-84 21-120 1-32-18-50-48-45-78 4-27 26-50 55-55 26-5 54 8 63 31 8 21-4 47-27 54-18 6-39-2-47-17"
+        ></path>
+        <path
+          class="contour-inner"
+          d="M343 161c49-29 114-17 148 25 25 31 30 72 17 105-10 28-33 50-60 64"></path>
+        <path class="contour-floor" d="M341 334c16 19 46 27 72 17 23-8 43-27 51-48"></path>
+      </g>
+      <g class="control-points">
+        <circle class="point point-a" cx="311" cy="139" r="6"></circle>
+        <circle class="point point-b" cx="529" cy="171" r="6"></circle>
+        <circle class="point point-c" cx="552" cy="306" r="6"></circle>
+        <circle class="point point-d" cx="342" cy="399" r="6"></circle>
+        <circle class="point point-e" cx="415" cy="297" r="6"></circle>
+        <circle class="point point-f" cx="341" cy="334" r="6"></circle>
+      </g>
+      <text x="374" y="455">vocal-tract contour</text>
+    </g>
+
+    <g class="flow-labels">
+      <text x="70" y="70">SOUND</text>
+      <path d="M128 66h72"></path>
+      <text x="216" y="70">REPRESENTATION</text>
+      <path d="M358 66h72"></path>
+      <text x="446" y="70">ARTICULATION</text>
+    </g>
+  </svg>
+
+  <div class="visual-caption" aria-hidden="true">
+    <span>sound</span><i></i><span>representation</span><i></i><span>shape</span>
+  </div>
+</div>
+
+<script>
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+
+  document.querySelectorAll<HTMLElement>('[data-sound-visual]').forEach((visual) => {
+    const resetPointer = () => {
+      visual.style.setProperty('--pointer-x', '0px');
+      visual.style.setProperty('--pointer-y', '0px');
+      visual.style.setProperty('--pointer-x-opposite', '0px');
+      visual.style.setProperty('--pointer-y-opposite', '0px');
+    };
+
+    visual.addEventListener('pointermove', (event) => {
+      if (reduceMotion.matches || event.pointerType === 'touch') return;
+      const bounds = visual.getBoundingClientRect();
+      const x = ((event.clientX - bounds.left) / bounds.width - 0.5) * 8;
+      const y = ((event.clientY - bounds.top) / bounds.height - 0.5) * 8;
+      visual.style.setProperty('--pointer-x', `${x.toFixed(2)}px`);
+      visual.style.setProperty('--pointer-y', `${y.toFixed(2)}px`);
+      visual.style.setProperty('--pointer-x-opposite', `${(-x * 0.65).toFixed(2)}px`);
+      visual.style.setProperty('--pointer-y-opposite', `${(-y * 0.65).toFixed(2)}px`);
+    });
+
+    visual.addEventListener('pointerleave', resetPointer);
+  });
+</script>
+
+<style>
+  .sound-to-shape {
+    --pointer-x: 0px;
+    --pointer-y: 0px;
+    --pointer-x-opposite: 0px;
+    --pointer-y-opposite: 0px;
+    position: relative;
+    width: min(100%, 44rem);
+    margin-inline: auto;
+    filter: drop-shadow(0 24px 50px var(--shadow-color));
+    isolation: isolate;
+  }
+
+  svg {
+    width: 100%;
+    overflow: visible;
+  }
+
+  .visual-surface {
+    fill: url('#visual-surface');
+    stroke: var(--line);
+    stroke-width: 1.5;
+    filter: url('#visual-shadow');
+  }
+
+  .coordinate-grid,
+  .background-anatomy,
+  .waveform,
+  .latent-axis,
+  .contour-drawing,
+  .flow-labels path {
+    fill: none;
+    vector-effect: non-scaling-stroke;
+  }
+
+  .coordinate-grid {
+    stroke: var(--line);
+    stroke-width: 1;
+    opacity: 0.42;
+  }
+
+  .background-anatomy {
+    stroke: var(--accent);
+    stroke-width: 1.5;
+    opacity: 0.13;
+  }
+
+  .background-anatomy circle {
+    fill: var(--accent);
+  }
+
+  .state {
+    transform-box: fill-box;
+    transform-origin: center;
+  }
+
+  .state text,
+  .flow-labels text {
+    fill: var(--ink-soft);
+    font-family: var(--font-mono);
+    font-size: 13px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+
+  .waveform-state {
+    animation: waveform-state 12s ease-in-out infinite;
+  }
+
+  .waveform {
+    stroke: var(--accent-strong);
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    stroke-width: 4;
+    stroke-dasharray: 9 7;
+    animation: wave-travel 4s linear infinite;
+  }
+
+  .wave-points circle {
+    fill: var(--signal);
+  }
+
+  .latent-state {
+    animation: latent-state 12s ease-in-out infinite;
+  }
+
+  .latent-blocks rect {
+    fill: var(--accent);
+    opacity: 0.72;
+    transform-box: fill-box;
+    transform-origin: center bottom;
+    animation: latent-pulse 2.4s ease-in-out infinite alternate;
+  }
+
+  .latent-blocks rect:nth-child(2n) {
+    fill: var(--signal);
+    animation-delay: -0.8s;
+  }
+
+  .latent-blocks rect:nth-child(3n) {
+    animation-delay: -1.6s;
+  }
+
+  .latent-axis {
+    stroke: var(--line-strong);
+    stroke-width: 1;
+  }
+
+  .contour-state {
+    animation: contour-state 12s ease-in-out infinite;
+  }
+
+  .contour-drawing {
+    transform: translate(var(--pointer-x), var(--pointer-y));
+    transition: transform 280ms ease-out;
+  }
+
+  .contour-main,
+  .contour-inner,
+  .contour-floor {
+    fill: none;
+    stroke: var(--ink);
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    vector-effect: non-scaling-stroke;
+  }
+
+  .contour-main {
+    stroke-width: 3;
+  }
+
+  .contour-inner,
+  .contour-floor {
+    stroke: var(--accent-strong);
+    stroke-width: 2;
+  }
+
+  .control-points .point {
+    fill: var(--paper-raised);
+    stroke: var(--signal);
+    stroke-width: 3;
+    vector-effect: non-scaling-stroke;
+    transition: transform 320ms ease-out;
+  }
+
+  .point-a,
+  .point-c,
+  .point-e {
+    transform: translate(var(--pointer-x), var(--pointer-y));
+  }
+
+  .point-b,
+  .point-d,
+  .point-f {
+    transform: translate(var(--pointer-x-opposite), var(--pointer-y-opposite));
+  }
+
+  .flow-labels path {
+    stroke: var(--line-strong);
+    stroke-dasharray: 3 5;
+  }
+
+  .flow-labels text {
+    font-size: 11px;
+    font-weight: 700;
+  }
+
+  .visual-caption {
+    position: absolute;
+    right: 7%;
+    bottom: 6%;
+    left: 7%;
+    display: flex;
+    gap: 0.65rem;
+    align-items: center;
+    justify-content: center;
+    color: var(--ink-soft);
+    font-family: var(--font-mono);
+    font-size: 0.66rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .visual-caption i {
+    width: clamp(1rem, 4vw, 3rem);
+    height: 1px;
+    background: var(--line-strong);
+  }
+
+  @keyframes waveform-state {
+    0%,
+    20%,
+    100% {
+      opacity: 1;
+      transform: translateX(0) scale(1);
+    }
+    29%,
+    88% {
+      opacity: 0;
+      transform: translateX(22px) scale(0.98);
+    }
+  }
+
+  @keyframes latent-state {
+    0%,
+    20%,
+    58%,
+    100% {
+      opacity: 0;
+      transform: translateY(10px) scale(0.97);
+    }
+    29%,
+    49% {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
+  }
+
+  @keyframes contour-state {
+    0%,
+    49%,
+    92%,
+    100% {
+      opacity: 0;
+      transform: translateX(-16px) scale(0.98);
+    }
+    59%,
+    84% {
+      opacity: 1;
+      transform: translateX(0) scale(1);
+    }
+  }
+
+  @keyframes wave-travel {
+    to {
+      stroke-dashoffset: -64;
+    }
+  }
+
+  @keyframes latent-pulse {
+    from {
+      transform: scaleY(0.82);
+    }
+    to {
+      transform: scaleY(1);
+    }
+  }
+
+  @media (max-width: 32rem) {
+    .flow-labels {
+      display: none;
+    }
+
+    .visual-caption {
+      bottom: 4%;
+      gap: 0.4rem;
+      font-size: 0.57rem;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .waveform-state,
+    .latent-state {
+      display: none;
+    }
+
+    .contour-state {
+      animation: none;
+      opacity: 1;
+      transform: none;
+    }
+
+    .contour-drawing,
+    .control-points .point {
+      transform: none;
+    }
+  }
+</style>

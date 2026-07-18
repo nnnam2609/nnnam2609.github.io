@@ -1,0 +1,36 @@
+---
+import { patchNotes } from '../../../data/wynkfuon';
+---
+
+<div class="patch-notes-app">
+  <div class="app-heading">
+    <div>
+      <p class="app-kicker">Relationship Patch Notes</p>
+      <h3>Update history</h3>
+    </div>
+    <span class="status-chip"><span aria-hidden="true">●</span> maintained</span>
+  </div>
+
+  <div class="patch-timeline">
+    {
+      patchNotes.map((release, index) => (
+        <article class="patch-release">
+          <div class="patch-marker" aria-hidden="true">
+            {String(index + 1).padStart(2, '0')}
+          </div>
+          <div>
+            <header>
+              <h4>{release.version}</h4>
+              {release.date && <p>{release.date}</p>}
+            </header>
+            <ul>
+              {release.changes.map((change) => (
+                <li>{change}</li>
+              ))}
+            </ul>
+          </div>
+        </article>
+      ))
+    }
+  </div>
+</div>

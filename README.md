@@ -1,14 +1,35 @@
 # Nhat-Nam Nguyen — personal website
 
-A static personal website for Nhat-Nam Nguyen, presenting research in speech, computer vision,
-medical imaging, and articulatory modelling alongside practical software work. The site uses Astro,
-strict TypeScript, content collections, and a small amount of progressive enhancement for theme
-preference.
+A static research website for Nhat-Nam Nguyen built around the concept **From Sound to Shape**. The
+homepage connects speech, learned representations, real-time MRI, and vocal-tract articulation with
+original SVG line work, restrained motion, and progressive enhancement. It uses Astro, strict
+TypeScript, and content collections.
 
 > [!NOTE]
 > **Production target:** this is the GitHub user site for `nnnam2609`, published from
 > `nnnam2609/nnnam2609.github.io` at `https://nnnam2609.github.io`. Astro uses that canonical URL with
 > no repository base path.
+
+## Homepage concept
+
+The homepage follows one visual and narrative sequence:
+
+```text
+Sound → Representation → Articulation
+```
+
+- `src/components/home/SoundToShapeVisual.astro` contains the animated waveform, latent blocks, and
+  vocal-tract contour used in the hero.
+- `src/components/home/ResearchPipeline.astro` presents Observe, Understand, and Reconstruct as a
+  scroll-linked research story.
+- `src/components/home/ProjectVisual.astro` gives each verified featured project its own SVG diagram.
+- `src/components/home/ResearchThemes.astro` presents the research map as lightweight theme cards.
+- `src/components/layout/CommandPalette.astro` provides `Ctrl/Cmd + K` navigation without a library.
+- `src/data/home.ts` stores homepage topics, pipeline copy, research themes, and the motion switch.
+- `src/data/site.ts` remains the single source for profile, contact, affiliation, and social data.
+
+The design uses system fonts, local SVG assets, CSS design tokens, and no external font or image CDN.
+Dark mode follows the operating-system preference until the visitor makes a saved manual choice.
 
 ## Technology choices
 
@@ -21,7 +42,7 @@ preference.
 - npm with a committed lockfile
 
 The site deliberately has no UI framework, CSS framework, database, CMS, server runtime, analytics,
-or external font dependency.
+animation library, or external font dependency. No dependency was added for the homepage redesign.
 
 ## Local development
 
@@ -49,6 +70,10 @@ Before opening a pull request, run `npm run check`, `npm run format:check`, and 
 General profile details live in `src/data/site.ts`. Research, project, publication, and note entries
 live under `src/content/`; their required fields are enforced by `src/content.config.ts`. Invalid
 frontmatter fails the build.
+
+Homepage-only editorial data lives in `src/data/home.ts`. Set `homeOptions.enableMotion` to `false`
+to keep the static contour state and disable the homepage motion layer. The system-level
+`prefers-reduced-motion` setting always overrides motion automatically.
 
 Optional values should be omitted until verified. The templates hide missing links, images, dates,
 contact fields, publication sections, and the PDF CV button. Never use `href="#"` as a placeholder.
@@ -135,9 +160,23 @@ watcher is initialized.
 ### Add the CV PDF
 
 Place the verified document at `public/cv.pdf`. The home hero and web CV page detect that file at
-build time and add download buttons automatically. Remove the file to hide both buttons. The web CV
-renders only sections backed by current data; education, experience, talks, skills, and languages are
-intentionally absent until verified information is supplied.
+build time and add download buttons automatically. When the file is absent, the PDF controls stay
+hidden. The web CV renders only sections backed by current data; education, experience, talks,
+skills, and languages are intentionally absent until verified information is supplied.
+
+### Replace the profile placeholder
+
+The hero currently uses `public/profile-placeholder.svg`, an original abstract `NN` monogram. After
+the profile photograph and publication permission are verified, add an optimized WebP or AVIF copy
+under `public/`, update the image path and alt text in `src/components/home/Hero.astro`, and leave the
+source photograph unchanged outside the repository.
+
+### Change the hero visual
+
+Edit `src/components/home/SoundToShapeVisual.astro`. Keep the SVG view box stable, preserve the
+static contour shown by the reduced-motion rules, and avoid inserting literal model diagrams or
+claims that are not supported by public research material. The color system is centralized in
+`src/styles/tokens.css`.
 
 ### Configure contact and social links
 
@@ -153,6 +192,16 @@ orcid: 'https://orcid.org/...',
 ```
 
 Empty fields are not rendered and are not included in JSON-LD structured data.
+
+## Local assets and validation evidence
+
+No external research image, dataset sample, or local CV was copied into the site during this
+redesign. Asset decisions and reviewed candidates are recorded in `docs/asset-sources.md`. Design,
+animation, mobile, accessibility, and performance decisions are recorded in
+`docs/homepage-design.md`.
+
+Browser-validation screenshots are stored in `docs/validation/`; they are documentation files and
+are not shipped by Astro because only `public/` becomes static site assets.
 
 ## GitHub Pages deployment
 

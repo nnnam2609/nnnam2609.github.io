@@ -1,30 +1,32 @@
 import type { VideoItem } from './types';
 
-// Add a public-folder path to `src` when the real file is ready, for example:
-// src: 'wynkfuon/videos/two-idiots-in-love.mp4'
 export const videos: VideoItem[] = [
   {
     id: 'two-idiots',
     title: 'Two Idiots in Love',
-    poster: 'wynkfuon/images/thumbnails/video-placeholder.svg',
-    caption: 'A very serious documentary with no serious moments.',
+    src: 'wynkfuon/videos/two-idiots-in-love.mp4',
+    poster: 'wynkfuon/images/thumbnails/two-idiots-in-love.webp',
+    caption: 'A tiny highlight reel featuring two highly unserious people.',
   },
   {
     id: 'normal-photo',
     title: 'Mission: Take One Normal Photo',
-    poster: 'wynkfuon/images/thumbnails/video-placeholder.svg',
-    caption: 'Mission status: spectacularly unsuccessful.',
+    src: 'wynkfuon/videos/one-normal-photo.mp4',
+    poster: 'wynkfuon/images/thumbnails/one-normal-photo.webp',
+    caption: 'Polaroid mode activated. Mission status: still adorable.',
   },
   {
-    id: 'everything-wrong',
-    title: 'The Day Everything Went Wrong',
-    poster: 'wynkfuon/images/thumbnails/video-placeholder.svg',
-    caption: 'Everything went wrong, except being together.',
+    id: 'by-the-sea',
+    title: 'Wynkfuon by the Sea',
+    src: 'wynkfuon/videos/wynkfuon-by-the-sea.mp4',
+    poster: 'wynkfuon/images/thumbnails/wynkfuon-by-the-sea.webp',
+    caption: 'Sunlight, sea breeze, and the main character herself.',
   },
   {
-    id: 'against-world',
-    title: 'Wynkfuon Against the World',
-    poster: 'wynkfuon/images/thumbnails/video-placeholder.svg',
-    caption: 'Season one. Renewed forever.',
+    id: 'flowers-for-you',
+    title: 'Flowers for You',
+    src: 'wynkfuon/videos/flowers-for-you.mp4',
+    poster: 'wynkfuon/images/thumbnails/flowers-for-you.webp',
+    caption: 'Proof that flowers are better when they end up in your hands.',
   },
 ];

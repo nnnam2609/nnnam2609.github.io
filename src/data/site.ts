@@ -45,7 +45,8 @@ export const siteProfile: SiteProfile = {
   email: 'nhat-nam.nguyen@loria.fr',
   personalEmail: 'nnnam2609@gmail.com',
   github: 'https://github.com/nnnam2609',
-  // TODO: Add verified LinkedIn, Scholar, and ORCID URLs when available.
+  linkedin: 'https://www.linkedin.com/in/nguyennhatnam2609/',
+  // TODO: Add verified Scholar and ORCID URLs when available.
 };
 
 export const navigation = [

@@ -22,8 +22,8 @@ small warm signal color marks control points and transitions.
 - Contours, coordinate grids, and landmarks evoke vocal-tract modelling and MRI analysis.
 - System sans-serif typography carries narrative content; system monospace is reserved for labels,
   statuses, and scientific metadata.
-- The public research images discovered locally were intentionally not used because publication
-  rights and participant-data safety were not sufficiently clear.
+- The verified profile photograph is used only as a small researcher identifier. Research visuals
+  remain original SVGs so the homepage does not expose participant data or file identifiers.
 
 ## Animation architecture
 
@@ -53,12 +53,12 @@ transitions, and preserves all text and navigation.
 - Static Astro HTML with small, scoped scripts for theme, navigation, hero pointer response, pipeline
   observation, and command palette.
 - No new runtime dependency.
-- No external font, image, analytics, or API request.
-- Inline SVG for line-art components; only favicon, profile placeholder, and social preview live in
-  `public/`.
+- No external font, image request, analytics, or API request.
+- Inline SVG for line-art components; favicon, the retained profile placeholder, social preview, and
+  the optimized 18.8 KB profile WebP live in `public/`.
 - Below-fold sections use `content-visibility: auto` with an intrinsic-size fallback.
-- The hero has an explicit SVG view box and the placeholder image has explicit dimensions to avoid
-  layout shift.
+- The hero has an explicit SVG view box and the profile image has explicit dimensions to avoid layout
+  shift.
 
 ## Mobile behaviour
 
@@ -75,11 +75,13 @@ transitions, and preserves all text and navigation.
 - The interactive research-node map was replaced by research theme cards. This keeps keyboard and
   mobile behaviour straightforward and avoids extra interaction code with little research value.
 - The optional `aai` easter egg was omitted to keep the initial homepage easier to maintain.
-- Real MRI frames, contours, grids, videos, lab logos, and university logos were not used because
-  their publication permissions were not confirmed.
+- Real MRI frames are not included yet even though general publication permission is confirmed; a
+  specific file still needs privacy and identifier review. Grid and segmentation assets were
+  explicitly not authorized for publication. Lab and university logos were not used.
 - `Sync Engine` was not recreated. The user had previously identified it as work they did not do, so
   including it would conflict with the no-fabrication requirement.
-- The unverified `avatar.jpg` and local CV candidates were not published.
+- The verified `avatar.jpg` is published as an optimized metadata-free WebP copy. Local CV candidates
+  remain unpublished until the correct public version is confirmed.
 
 ## Validation evidence
 

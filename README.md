@@ -164,12 +164,12 @@ build time and add download buttons automatically. When the file is absent, the 
 hidden. The web CV renders only sections backed by current data; education, experience, talks,
 skills, and languages are intentionally absent until verified information is supplied.
 
-### Replace the profile placeholder
+### Update the profile photograph
 
-The hero currently uses `public/profile-placeholder.svg`, an original abstract `NN` monogram. After
-the profile photograph and publication permission are verified, add an optimized WebP or AVIF copy
-under `public/`, update the image path and alt text in `src/components/home/Hero.astro`, and leave the
-source photograph unchanged outside the repository.
+The hero uses `public/profile-nhat-nam.webp`, an optimized copy of the user-verified `avatar.jpg`.
+To update it, create a metadata-free WebP or AVIF copy under `public/`, keep a square aspect ratio,
+update the image path and alt text in `src/components/home/Hero.astro` if the filename changes, and
+leave the source photograph unchanged.
 
 ### Change the hero visual
 
@@ -186,7 +186,7 @@ Set verified optional values in `src/data/site.ts`:
 email: 'nhat-nam.nguyen@loria.fr',
 personalEmail: 'nnnam2609@gmail.com',
 github: 'https://github.com/nnnam2609',
-linkedin: 'https://www.linkedin.com/in/...',
+linkedin: 'https://www.linkedin.com/in/nguyennhatnam2609/',
 scholar: 'https://scholar.google.com/...',
 orcid: 'https://orcid.org/...',
 ```
@@ -195,10 +195,11 @@ Empty fields are not rendered and are not included in JSON-LD structured data.
 
 ## Local assets and validation evidence
 
-No external research image, dataset sample, or local CV was copied into the site during this
-redesign. Asset decisions and reviewed candidates are recorded in `docs/asset-sources.md`. Design,
-animation, mobile, accessibility, and performance decisions are recorded in
-`docs/homepage-design.md`.
+The verified profile photograph is included as an optimized WebP. No external research image,
+dataset sample, or local CV was copied into the site. General MRI publication permission is recorded,
+but each candidate still requires privacy review; grid and segmentation assets are not authorized.
+Asset decisions and reviewed candidates are recorded in `docs/asset-sources.md`. Design, animation,
+mobile, accessibility, and performance decisions are recorded in `docs/homepage-design.md`.
 
 Browser-validation screenshots are stored in `docs/validation/`; they are documentation files and
 are not shipped by Astro because only `public/` becomes static site assets.
@@ -282,10 +283,10 @@ enabled, and the workflow has access to the `github-pages` environment. Review b
 
 - [x] Email — LORIA and personal
 - [x] GitHub profile URL — `https://github.com/nnnam2609`
-- [ ] LinkedIn URL
+- [x] LinkedIn URL — `https://www.linkedin.com/in/nguyennhatnam2609/`
 - [ ] Google Scholar URL — not available yet
 - [ ] ORCID — not available yet
-- [ ] Profile photograph
+- [x] Profile photograph and publication permission
 - [ ] CV PDF
 - [ ] Verified publication list — coming soon
 - [ ] Verified project repository links — repositories are not public yet

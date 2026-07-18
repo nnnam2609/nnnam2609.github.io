@@ -2,7 +2,7 @@ import sitemap from '@astrojs/sitemap';
 import { defineConfig } from 'astro/config';
 
 export default defineConfig({
-  site: 'https://nhatnam.github.io',
+  site: 'https://nnnam2609.github.io',
   output: 'static',
   integrations: [sitemap()],
 });

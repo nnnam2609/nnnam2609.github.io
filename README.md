@@ -5,14 +5,10 @@ medical imaging, and articulatory modelling alongside practical software work. T
 strict TypeScript, content collections, and a small amount of progressive enhancement for theme
 preference.
 
-> [!IMPORTANT]
-> **Repository identity mismatch:** the verified GitHub profile is `nnnam2609`, while this repository
-> is named `nhatnam.github.io`. It cannot serve the requested root URL `https://nhatnam.github.io` from
-> the current account. The recommended GitHub user-site option is to rename the repository to
-> `nnnam2609.github.io` and update the canonical site URL to `https://nnnam2609.github.io`. Keeping the
-> original URL instead requires a GitHub account or organization named `nhatnam`. A project-site
-> deployment from the current repository would use `/nhatnam.github.io` as a base path and is a
-> different deployment target, so it is not configured silently.
+> [!NOTE]
+> **Production target:** this is the GitHub user site for `nnnam2609`, published from
+> `nnnam2609/nnnam2609.github.io` at `https://nnnam2609.github.io`. Astro uses that canonical URL with
+> no repository base path.
 
 ## Technology choices
 
@@ -171,9 +167,9 @@ It runs on pushes to `main` and can be launched manually with `workflow_dispatch
 limited to reading repository contents and writing a verified Pages deployment. Concurrency allows an
 in-progress production deployment to finish before a later deployment starts.
 
-One-time repository setup after choosing and configuring the final URL:
+One-time repository setup:
 
-1. Open **Settings → Pages** in the final user-site repository.
+1. Open **Settings → Pages** in `nnnam2609/nnnam2609.github.io`.
 2. Under **Build and deployment → Source**, select **GitHub Actions**.
 3. Merge a reviewed change to `main` or run the workflow manually.
 4. Confirm the deployment reports the same URL configured in `astro.config.mjs`.
@@ -181,7 +177,7 @@ One-time repository setup after choosing and configuring the final URL:
 The site configuration is:
 
 ```js
-site: 'https://nhatnam.github.io';
+site: 'https://nnnam2609.github.io';
 ```
 
 There is no `base` because this is designed as a root GitHub user site.
@@ -210,8 +206,8 @@ only theme persistence requires it. No visitor data is collected.
 ### Links or assets point at the wrong Pages path
 
 Confirm the repository owner and name. This code is intentionally configured only for the root URL
-`https://nhatnam.github.io`; deploying `nnnam2609/nhatnam.github.io` creates a project-site path and is
-not equivalent. Resolve repository ownership rather than adding a base path.
+`https://nnnam2609.github.io` from `nnnam2609/nnnam2609.github.io`. Do not add a repository base path
+for this user-site deployment.
 
 ### A content build fails
 

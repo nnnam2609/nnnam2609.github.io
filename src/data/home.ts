@@ -1,3 +1,7 @@
+export const homeOptions = {
+  enableMotion: true,
+} as const;
+
 export const explorationItems = [
   { topic: 'Speaker-independent AAI', status: 'Researching' },
   { topic: 'MRI-video JEPA', status: 'Exploring' },

@@ -62,6 +62,13 @@ import { navigation, siteProfile } from '../../data/site';
   document.addEventListener('keydown', (event) => {
     const target = event.target as HTMLElement | null;
     const isTyping = target?.matches('input, textarea, select, [contenteditable="true"]');
+
+    if (event.key === 'Escape' && dialog?.open) {
+      event.preventDefault();
+      dialog.close();
+      return;
+    }
+
     if ((event.metaKey || event.ctrlKey) && event.key.toLowerCase() === 'k' && !isTyping) {
       event.preventDefault();
       openPalette();

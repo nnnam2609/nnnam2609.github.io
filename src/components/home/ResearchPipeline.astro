@@ -1,8 +1,13 @@
 ---
-import { researchPipeline } from '../../data/home';
+import { homeOptions, researchPipeline } from '../../data/home';
 ---
 
-<section class="section pipeline-section" aria-labelledby="pipeline-title" data-pipeline>
+<section
+  class="section pipeline-section"
+  aria-labelledby="pipeline-title"
+  data-pipeline
+  data-motion={homeOptions.enableMotion ? 'on' : 'off'}
+>
   <div class="container">
     <div class="section-heading pipeline-heading">
       <p class="eyebrow">Research pipeline</p>
@@ -126,7 +131,7 @@ import { researchPipeline } from '../../data/home';
       labels.forEach((label, labelIndex) => label.classList.toggle('active', labelIndex === index));
     };
 
-    if (!('IntersectionObserver' in window)) return;
+    if (pipeline.dataset.motion === 'off' || !('IntersectionObserver' in window)) return;
 
     const observer = new IntersectionObserver(
       (entries) => {
@@ -375,5 +380,11 @@ import { researchPipeline } from '../../data/home';
     .visual-state {
       transform: none;
     }
+  }
+
+  .pipeline-section[data-motion='off'] .pipeline-step,
+  .pipeline-section[data-motion='off'] .visual-state {
+    transition: none;
+    transform: none;
   }
 </style>

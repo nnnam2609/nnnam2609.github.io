@@ -1,0 +1,55 @@
+---
+import { finalLetter } from '../../data/wynkfuon';
+import { assetPath } from '../../utils/assetPath';
+---
+
+<section class="final-screen" id="final-screen" data-screen="final" hidden>
+  <div class="final-stars" aria-hidden="true"><span>✦</span><span>♡</span><span>✧</span></div>
+  <div class="final-shell">
+    <header class="final-header">
+      <p class="system-kicker">SECRET FILE DECRYPTED</p>
+      <span aria-hidden="true">checksum: love_is_real</span>
+    </header>
+
+    <div class="final-grid">
+      <figure class="final-media">
+        {
+          finalLetter.media.type === 'image' ? (
+            <img
+              src={assetPath(finalLetter.media.src)}
+              alt={finalLetter.media.alt}
+              width="1200"
+              height="900"
+              loading="lazy"
+              decoding="async"
+            />
+          ) : (
+            <video
+              src={assetPath(finalLetter.media.src)}
+              aria-label={finalLetter.media.alt}
+              controls
+              playsinline
+              preload="metadata"
+            />
+          )
+        }
+        <figcaption>our_story_final_final_v3_REAL.jpg</figcaption>
+      </figure>
+
+      <article class="final-letter" tabindex="-1" data-final-letter>
+        <span class="letter-tape letter-tape--left" aria-hidden="true"></span>
+        <span class="letter-tape letter-tape--right" aria-hidden="true"></span>
+        <p class="letter-salutation">{finalLetter.salutation}</p>
+        {finalLetter.paragraphs.map((paragraph) => <p>{paragraph}</p>)}
+        <p class="letter-signoff">{finalLetter.signOff}</p>
+      </article>
+    </div>
+
+    <div class="final-actions">
+      <button class="pixel-button" id="return-to-desktop" type="button">
+        <span aria-hidden="true">←</span> RETURN TO DESKTOP
+      </button>
+      <p>New memories can be installed at any time.</p>
+    </div>
+  </div>
+</section>

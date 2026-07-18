@@ -1,0 +1,119 @@
+---
+import DesktopIcon from './DesktopIcon.astro';
+import Window from './Window.astro';
+import LoveReasonsApp from './apps/LoveReasonsApp.astro';
+import MemoriesApp from './apps/MemoriesApp.astro';
+import MemoryGameApp from './apps/MemoryGameApp.astro';
+import PatchNotesApp from './apps/PatchNotesApp.astro';
+import SecretFileApp from './apps/SecretFileApp.astro';
+import VideosApp from './apps/VideosApp.astro';
+
+const apps = [
+  { id: 'memories', label: 'our_memories/', glyph: '★', kind: 'folder' as const },
+  { id: 'videos', label: 'chaotic_videos/', glyph: '▶', kind: 'folder' as const },
+  { id: 'patches', label: 'relationship_patch_notes.txt', glyph: '≡', kind: 'file' as const },
+  { id: 'reasons', label: 'reasons_i_love_you.exe', glyph: '♥', kind: 'app' as const },
+  { id: 'game', label: 'memory_game.exe', glyph: '?', kind: 'app' as const },
+  { id: 'secret', label: 'do_not_open.exe', glyph: '◆', kind: 'secret' as const },
+];
+---
+
+<section class="desktop-screen" id="desktop-screen" data-screen="desktop" hidden>
+  <a class="skip-link" href="#desktop-icons">Skip to desktop icons</a>
+
+  <div class="desktop-wallpaper" aria-hidden="true">
+    <span class="wallpaper-star wallpaper-star--one">✦</span>
+    <span class="wallpaper-star wallpaper-star--two">✧</span>
+    <span class="wallpaper-star wallpaper-star--three">⋆</span>
+    <span class="wallpaper-doodle">you + me<br />// always</span>
+    <span class="wallpaper-heart">♡</span>
+  </div>
+
+  <header class="desktop-menubar">
+    <div class="desktop-brand"><span aria-hidden="true">♥</span> WYNKFUON_OS</div>
+    <p class="desktop-message">private archive // connection stable</p>
+    <time data-system-clock aria-label="Current time">--:--</time>
+  </header>
+
+  <main class="desktop-workspace" data-desktop-workspace>
+    <div class="desktop-icons" id="desktop-icons" aria-label="Applications">
+      {apps.map((app) => <DesktopIcon {...app} />)}
+    </div>
+
+    <div class="desktop-hint" aria-hidden="true">
+      <span>✦</span>
+      <p>Open three files<br />to recover the secret</p>
+    </div>
+
+    <div class="window-layer" data-window-layer>
+      <Window
+        id="memories"
+        title="our_memories/"
+        glyph="★"
+        position={{ x: '17%', y: '7%' }}
+        size="wide"
+      >
+        <MemoriesApp />
+      </Window>
+
+      <Window
+        id="videos"
+        title="chaotic_videos/"
+        glyph="▶"
+        position={{ x: '26%', y: '12%' }}
+        size="wide"
+      >
+        <VideosApp />
+      </Window>
+
+      <Window
+        id="patches"
+        title="relationship_patch_notes.txt"
+        glyph="≡"
+        position={{ x: '22%', y: '8%' }}
+      >
+        <PatchNotesApp />
+      </Window>
+
+      <Window
+        id="reasons"
+        title="reasons_i_love_you.exe"
+        glyph="♥"
+        position={{ x: '31%', y: '15%' }}
+      >
+        <LoveReasonsApp />
+      </Window>
+
+      <Window id="game" title="memory_game.exe" glyph="?" position={{ x: '24%', y: '6%' }}>
+        <MemoryGameApp />
+      </Window>
+
+      <Window id="secret" title="do_not_open.exe" glyph="◆" position={{ x: '30%', y: '13%' }}>
+        <SecretFileApp />
+      </Window>
+    </div>
+  </main>
+
+  <footer class="desktop-taskbar">
+    <button class="start-button" type="button" aria-label="Wynkfuon system menu" data-start-button>
+      <span aria-hidden="true">♥</span> start
+    </button>
+    <div class="taskbar-progress">
+      <span class="taskbar-progress__label" data-secret-progress>
+        Secret file integrity: 0 / 3 memories recovered
+      </span>
+      <span class="taskbar-progress__track" aria-hidden="true"
+        ><span data-secret-progress-bar></span></span
+      >
+    </div>
+    <button class="reset-button" id="reset-progress" type="button">reset progress</button>
+  </footer>
+
+  <div class="system-menu" data-system-menu hidden>
+    <strong>Wynkfuon.exe</strong>
+    <p>Memory archive is running locally in this browser.</p>
+    <button type="button" data-menu-close>Close menu</button>
+  </div>
+
+  <p class="toast" data-system-toast role="status" aria-live="polite" hidden></p>
+</section>

@@ -1,0 +1,612 @@
+---
+import '../../styles/wynkfuon.css';
+import BootSequence from './BootSequence.astro';
+import Desktop from './Desktop.astro';
+import FinalScreen from './FinalScreen.astro';
+import IntroScreen from './IntroScreen.astro';
+---
+
+<div class="wynkfuon-shell" data-wynkfuon-shell>
+  <IntroScreen />
+  <BootSequence />
+  <Desktop />
+  <FinalScreen />
+</div>
+
+<script>
+  type AppId = 'memories' | 'videos' | 'patches' | 'reasons' | 'game' | 'secret';
+  type ReactionId = 'forever' | 'chaotic' | 'classified';
+
+  interface StoredProgress {
+    introSeen?: boolean;
+    openedApps?: AppId[];
+    secretUnlocked?: boolean;
+    reactions?: Record<string, ReactionId>;
+  }
+
+  const STORAGE_KEY = 'wynkfuon-progress-v1';
+  const RECOVERY_TARGET = 3;
+  const recoverableApps: AppId[] = ['memories', 'videos', 'patches', 'reasons', 'game'];
+  const allAppIds: AppId[] = [...recoverableApps, 'secret'];
+  const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+  const mobileWindows = window.matchMedia('(max-width: 51.99rem)');
+  const shellElement = document.querySelector<HTMLElement>('[data-wynkfuon-shell]');
+
+  if (!shellElement) {
+    throw new Error('Wynkfuon shell could not be initialized.');
+  }
+
+  const shell: HTMLElement = shellElement;
+
+  let progress = readProgress();
+  let openedApps = new Set<AppId>(
+    (progress.openedApps ?? []).filter((app): app is AppId => recoverableApps.includes(app)),
+  );
+  let reactions: Record<string, ReactionId> = progress.reactions ?? {};
+  let secretUnlocked = Boolean(progress.secretUnlocked) || openedApps.size >= RECOVERY_TARGET;
+  let activeWindow: AppId | null = null;
+  let lastWindowTrigger: HTMLElement | null = null;
+  let zIndex = 20;
+  let bootTimers: number[] = [];
+
+  function readProgress(): StoredProgress {
+    try {
+      const saved = localStorage.getItem(STORAGE_KEY);
+      return saved ? (JSON.parse(saved) as StoredProgress) : {};
+    } catch {
+      return {};
+    }
+  }
+
+  function saveProgress(): void {
+    progress = {
+      introSeen: Boolean(progress.introSeen),
+      openedApps: [...openedApps],
+      secretUnlocked,
+      reactions,
+    };
+
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(progress));
+    } catch {
+      // The microsite remains fully usable when storage is blocked or unavailable.
+    }
+  }
+
+  function getScreen(id: string): HTMLElement | null {
+    return shell.querySelector<HTMLElement>(`#${id}-screen`);
+  }
+
+  function showScreen(id: 'intro' | 'boot' | 'desktop' | 'final'): void {
+    shell.querySelectorAll<HTMLElement>('[data-screen]').forEach((screen) => {
+      screen.hidden = screen.dataset.screen !== id;
+    });
+  }
+
+  function startBoot(): void {
+    progress.introSeen = true;
+    saveProgress();
+    showScreen('boot');
+
+    const lines = [...shell.querySelectorAll<HTMLElement>('[data-boot-line]')];
+    lines.forEach((line) => line.classList.remove('is-visible'));
+    const interval = reducedMotion.matches ? 25 : 240;
+    lines.forEach((line, index) => {
+      bootTimers.push(window.setTimeout(() => line.classList.add('is-visible'), index * interval));
+    });
+    bootTimers.push(
+      window.setTimeout(finishBoot, reducedMotion.matches ? 160 : lines.length * interval + 420),
+    );
+  }
+
+  function finishBoot(): void {
+    bootTimers.forEach((timer) => window.clearTimeout(timer));
+    bootTimers = [];
+    showScreen('desktop');
+    updateSecretProgress();
+    updateClock();
+    shell.querySelector<HTMLButtonElement>('[data-app-launch]')?.focus();
+  }
+
+  function showToast(message: string): void {
+    const toast = shell.querySelector<HTMLElement>('[data-system-toast]');
+    if (!toast) return;
+    toast.textContent = message;
+    toast.hidden = false;
+    window.setTimeout(
+      () => {
+        toast.hidden = true;
+      },
+      reducedMotion.matches ? 900 : 2400,
+    );
+  }
+
+  function updateSecretProgress(): void {
+    const recovered = Math.min(openedApps.size, RECOVERY_TARGET);
+    const progressText = secretUnlocked
+      ? 'Secret file integrity: complete — file unlocked'
+      : `Secret file integrity: ${recovered} / ${RECOVERY_TARGET} memories recovered`;
+    shell.querySelectorAll<HTMLElement>('[data-secret-progress]').forEach((label) => {
+      label.textContent = progressText;
+    });
+    shell.querySelectorAll<HTMLElement>('[data-secret-progress-bar]').forEach((bar) => {
+      bar.style.width = `${(recovered / RECOVERY_TARGET) * 100}%`;
+    });
+
+    const secretIcon = shell.querySelector<HTMLButtonElement>('[data-app-launch="secret"]');
+    if (secretIcon) {
+      secretIcon.classList.toggle('is-locked', !secretUnlocked);
+      secretIcon.classList.toggle('is-unlocked', secretUnlocked);
+      secretIcon.setAttribute(
+        'aria-label',
+        secretUnlocked ? 'Open do_not_open.exe, unlocked' : 'do_not_open.exe, locked',
+      );
+    }
+    shell.querySelectorAll<HTMLElement>('[data-secret-lock]').forEach((lock) => {
+      lock.textContent = secretUnlocked ? '◇' : '▣';
+    });
+  }
+
+  function unlockSecretIfReady(): void {
+    if (secretUnlocked || openedApps.size < RECOVERY_TARGET) return;
+    secretUnlocked = true;
+    saveProgress();
+    updateSecretProgress();
+    showToast('✦ Secret file decrypted. do_not_open.exe is ready.');
+  }
+
+  function getWindow(appId: AppId): HTMLElement | null {
+    return shell.querySelector<HTMLElement>(`[data-window="${appId}"]`);
+  }
+
+  function raiseWindow(appId: AppId): void {
+    const appWindow = getWindow(appId);
+    if (!appWindow) return;
+    zIndex += 1;
+    appWindow.style.zIndex = String(zIndex);
+    activeWindow = appId;
+    shell.querySelectorAll<HTMLElement>('[data-window]').forEach((candidate) => {
+      candidate.classList.toggle('is-active', candidate === appWindow);
+    });
+  }
+
+  function openWindow(appId: AppId, trigger?: HTMLElement): void {
+    if (appId === 'secret' && !secretUnlocked) {
+      const remaining = RECOVERY_TARGET - openedApps.size;
+      showToast(
+        `File locked. Recover ${remaining} more ${remaining === 1 ? 'memory' : 'memories'}.`,
+      );
+      const icon = shell.querySelector<HTMLElement>('[data-app-launch="secret"]');
+      icon?.classList.remove('is-denied');
+      requestAnimationFrame(() => icon?.classList.add('is-denied'));
+      return;
+    }
+
+    if (recoverableApps.includes(appId)) {
+      openedApps.add(appId);
+      saveProgress();
+      updateSecretProgress();
+      unlockSecretIfReady();
+    }
+
+    const appWindow = getWindow(appId);
+    if (!appWindow) return;
+    lastWindowTrigger = trigger ?? null;
+    appWindow.hidden = false;
+    appWindow.classList.remove('is-minimized');
+    appWindow.setAttribute('aria-modal', String(mobileWindows.matches));
+    raiseWindow(appId);
+    appWindow.focus({ preventScroll: true });
+  }
+
+  function closeWindow(appId: AppId, restoreFocus = true): void {
+    const appWindow = getWindow(appId);
+    if (!appWindow) return;
+    appWindow.hidden = true;
+    appWindow.classList.remove('is-active');
+    pauseVideos(appWindow);
+    if (activeWindow === appId) activeWindow = null;
+    if (restoreFocus) {
+      const launchIcon = shell.querySelector<HTMLButtonElement>(`[data-app-launch="${appId}"]`);
+      (lastWindowTrigger ?? launchIcon)?.focus({ preventScroll: true });
+    }
+  }
+
+  function minimizeWindow(appId: AppId): void {
+    const appWindow = getWindow(appId);
+    if (!appWindow) return;
+    appWindow.hidden = true;
+    appWindow.classList.add('is-minimized');
+    if (activeWindow === appId) activeWindow = null;
+    pauseVideos(appWindow);
+    shell.querySelector<HTMLButtonElement>(`[data-app-launch="${appId}"]`)?.focus();
+  }
+
+  function pauseVideos(scope: ParentNode = document): void {
+    scope.querySelectorAll<HTMLVideoElement>('video').forEach((video) => video.pause());
+  }
+
+  function setupWindowControls(): void {
+    shell.querySelectorAll<HTMLButtonElement>('[data-app-launch]').forEach((button) => {
+      button.addEventListener('click', () => openWindow(button.dataset.appLaunch as AppId, button));
+    });
+    shell.querySelectorAll<HTMLButtonElement>('[data-window-close]').forEach((button) => {
+      button.addEventListener('click', () => closeWindow(button.dataset.windowClose as AppId));
+    });
+    shell.querySelectorAll<HTMLButtonElement>('[data-window-minimize]').forEach((button) => {
+      button.addEventListener('click', () =>
+        minimizeWindow(button.dataset.windowMinimize as AppId),
+      );
+    });
+    shell.querySelectorAll<HTMLElement>('[data-window]').forEach((appWindow) => {
+      appWindow.addEventListener('pointerdown', () =>
+        raiseWindow(appWindow.dataset.window as AppId),
+      );
+    });
+  }
+
+  function setupWindowDragging(): void {
+    shell.querySelectorAll<HTMLElement>('[data-drag-handle]').forEach((handle) => {
+      handle.addEventListener('pointerdown', (event) => {
+        if (mobileWindows.matches || event.button !== 0) return;
+        if ((event.target as HTMLElement).closest('button')) return;
+        const appWindow = handle.closest<HTMLElement>('[data-window]');
+        const workspace = shell.querySelector<HTMLElement>('[data-desktop-workspace]');
+        if (!appWindow || !workspace) return;
+
+        event.preventDefault();
+        handle.setPointerCapture(event.pointerId);
+        const startX = event.clientX;
+        const startY = event.clientY;
+        const startLeft = appWindow.offsetLeft;
+        const startTop = appWindow.offsetTop;
+        appWindow.classList.add('is-dragging');
+
+        const move = (moveEvent: PointerEvent) => {
+          const maxLeft = Math.max(0, workspace.clientWidth - appWindow.offsetWidth);
+          const maxTop = Math.max(0, workspace.clientHeight - appWindow.offsetHeight);
+          const left = Math.min(maxLeft, Math.max(0, startLeft + moveEvent.clientX - startX));
+          const top = Math.min(maxTop, Math.max(0, startTop + moveEvent.clientY - startY));
+          appWindow.style.left = `${left}px`;
+          appWindow.style.top = `${top}px`;
+        };
+        const stop = () => {
+          appWindow.classList.remove('is-dragging');
+          handle.removeEventListener('pointermove', move);
+          handle.removeEventListener('pointerup', stop);
+          handle.removeEventListener('pointercancel', stop);
+        };
+
+        handle.addEventListener('pointermove', move);
+        handle.addEventListener('pointerup', stop);
+        handle.addEventListener('pointercancel', stop);
+      });
+    });
+  }
+
+  function setupMemories(): void {
+    const memoryApp = shell.querySelector<HTMLElement>('[data-memories-app]');
+    if (!memoryApp) return;
+    const cards = [...memoryApp.querySelectorAll<HTMLElement>('[data-memory-card]')];
+    let selectedMemory = 0;
+
+    const render = () => {
+      cards.forEach((card, index) => {
+        card.hidden = index !== selectedMemory;
+        if (index === selectedMemory) {
+          const savedReaction = reactions[card.dataset.memoryId ?? ''];
+          card.querySelectorAll<HTMLButtonElement>('[data-reaction]').forEach((button) => {
+            button.setAttribute('aria-pressed', String(button.dataset.reaction === savedReaction));
+          });
+        }
+      });
+      const announcer = memoryApp.querySelector<HTMLElement>('[data-memory-announcer]');
+      if (announcer)
+        announcer.textContent = `Showing memory ${selectedMemory + 1} of ${cards.length}`;
+    };
+
+    memoryApp.querySelectorAll<HTMLButtonElement>('[data-memory-action]').forEach((button) => {
+      button.addEventListener('click', () => {
+        if (button.dataset.memoryAction === 'previous') {
+          selectedMemory = (selectedMemory - 1 + cards.length) % cards.length;
+        } else if (button.dataset.memoryAction === 'next') {
+          selectedMemory = (selectedMemory + 1) % cards.length;
+        } else {
+          let next = selectedMemory;
+          while (cards.length > 1 && next === selectedMemory) {
+            next = Math.floor(Math.random() * cards.length);
+          }
+          selectedMemory = next;
+        }
+        render();
+      });
+    });
+
+    memoryApp.querySelectorAll<HTMLButtonElement>('[data-reaction]').forEach((button) => {
+      button.addEventListener('click', () => {
+        const card = button.closest<HTMLElement>('[data-memory-card]');
+        const memoryId = card?.dataset.memoryId;
+        const reaction = button.dataset.reaction as ReactionId;
+        if (!card || !memoryId) return;
+        if (reactions[memoryId] === reaction) {
+          delete reactions[memoryId];
+        } else {
+          reactions[memoryId] = reaction;
+        }
+        card.querySelectorAll<HTMLButtonElement>('[data-reaction]').forEach((candidate) => {
+          candidate.setAttribute(
+            'aria-pressed',
+            String(candidate === button && Boolean(reactions[memoryId])),
+          );
+        });
+        saveProgress();
+      });
+    });
+    render();
+  }
+
+  function setupVideos(): void {
+    const videoApp = shell.querySelector<HTMLElement>('[data-videos-app]');
+    const dialog = videoApp?.querySelector<HTMLDialogElement>('[data-video-dialog]');
+    const player = dialog?.querySelector<HTMLVideoElement>('[data-video-player]');
+    const empty = dialog?.querySelector<HTMLElement>('[data-video-empty]');
+    if (!videoApp || !dialog || !player || !empty) return;
+
+    videoApp.querySelectorAll<HTMLButtonElement>('[data-video-open]').forEach((button) => {
+      button.addEventListener('click', () => {
+        const card = button.closest<HTMLElement>('[data-video-card]');
+        if (!card) return;
+        pauseVideos();
+        const title = dialog.querySelector<HTMLElement>('[data-video-dialog-title]');
+        const caption = dialog.querySelector<HTMLElement>('[data-video-dialog-caption]');
+        if (title) title.textContent = card.dataset.videoTitle ?? 'Untitled video';
+        if (caption) caption.textContent = card.dataset.videoCaption ?? '';
+        const src = card.dataset.videoSrc;
+        if (src) {
+          player.src = src;
+          player.poster = card.dataset.videoPoster ?? '';
+          player.hidden = false;
+          empty.hidden = true;
+        } else {
+          player.removeAttribute('src');
+          player.hidden = true;
+          empty.hidden = false;
+        }
+        dialog.showModal();
+      });
+    });
+
+    const closeVideo = () => {
+      player.pause();
+      player.removeAttribute('src');
+      player.load();
+      if (dialog.open) dialog.close();
+    };
+    dialog
+      .querySelector<HTMLButtonElement>('[data-video-close]')
+      ?.addEventListener('click', closeVideo);
+    dialog.addEventListener('close', () => {
+      player.pause();
+      player.removeAttribute('src');
+      player.load();
+    });
+    player.addEventListener('play', () => {
+      document.querySelectorAll<HTMLVideoElement>('video').forEach((video) => {
+        if (video !== player) video.pause();
+      });
+    });
+  }
+
+  function setupLoveReasons(): void {
+    const reasonApp = shell.querySelector<HTMLElement>('[data-love-reasons-app]');
+    if (!reasonApp) return;
+    const reasons = [...reasonApp.querySelectorAll<HTMLElement>('[data-reason]')];
+    const display = reasonApp.querySelector<HTMLElement>('[data-reason-display]');
+    let selectedReason = 0;
+    reasonApp
+      .querySelector<HTMLButtonElement>('[data-generate-reason]')
+      ?.addEventListener('click', () => {
+        let next = selectedReason;
+        while (reasons.length > 1 && next === selectedReason) {
+          next = Math.floor(Math.random() * reasons.length);
+        }
+        selectedReason = next;
+        display?.classList.remove('is-switching');
+        requestAnimationFrame(() => display?.classList.add('is-switching'));
+        reasons.forEach((reason, index) => (reason.hidden = index !== selectedReason));
+        const announcer = reasonApp.querySelector<HTMLElement>('[data-reason-announcer]');
+        if (announcer) announcer.textContent = reasons[selectedReason]?.textContent?.trim() ?? '';
+      });
+  }
+
+  function setupMemoryGame(): void {
+    const game = shell.querySelector<HTMLElement>('[data-memory-game]');
+    const grid = game?.querySelector<HTMLElement>('[data-game-grid]');
+    if (!game || !grid) return;
+    let firstCard: HTMLButtonElement | null = null;
+    let secondCard: HTMLButtonElement | null = null;
+    let moves = 0;
+    let matches = 0;
+    let locked = false;
+
+    const moveLabel = game.querySelector<HTMLElement>('[data-game-moves]');
+    const status = game.querySelector<HTMLElement>('[data-game-status]');
+
+    const flipDown = (card: HTMLButtonElement) => {
+      card.classList.remove('is-flipped');
+      card.setAttribute('aria-pressed', 'false');
+      card.setAttribute('aria-label', 'Hidden memory card');
+    };
+    const resetTurn = () => {
+      firstCard = null;
+      secondCard = null;
+      locked = false;
+    };
+    const handleCard = (card: HTMLButtonElement) => {
+      if (locked || card.classList.contains('is-matched') || card === firstCard) return;
+      card.classList.add('is-flipped');
+      card.setAttribute('aria-pressed', 'true');
+      card.setAttribute('aria-label', `Revealed ${card.dataset.pair ?? 'memory'} card`);
+      if (!firstCard) {
+        firstCard = card;
+        return;
+      }
+
+      secondCard = card;
+      moves += 1;
+      if (moveLabel) moveLabel.textContent = String(moves);
+      if (firstCard.dataset.pair === secondCard.dataset.pair) {
+        firstCard.classList.add('is-matched');
+        secondCard.classList.add('is-matched');
+        firstCard.disabled = true;
+        secondCard.disabled = true;
+        matches += 1;
+        if (status) {
+          status.textContent =
+            matches === 4
+              ? `Archive recovered in ${moves} moves. Certified memory genius!`
+              : `${4 - matches} ${4 - matches === 1 ? 'pair' : 'pairs'} still hiding.`;
+        }
+        resetTurn();
+      } else {
+        locked = true;
+        if (status) status.textContent = 'Not a match. Re-hiding those files…';
+        window.setTimeout(
+          () => {
+            if (firstCard) flipDown(firstCard);
+            if (secondCard) flipDown(secondCard);
+            if (status) status.textContent = `${4 - matches} pairs still hiding.`;
+            resetTurn();
+          },
+          reducedMotion.matches ? 120 : 650,
+        );
+      }
+    };
+
+    game.querySelectorAll<HTMLButtonElement>('[data-game-card]').forEach((card) => {
+      card.addEventListener('click', () => handleCard(card));
+    });
+
+    const restart = () => {
+      firstCard = null;
+      secondCard = null;
+      moves = 0;
+      matches = 0;
+      locked = false;
+      if (moveLabel) moveLabel.textContent = '0';
+      if (status) status.textContent = '4 pairs are hiding.';
+      const cards = [...grid.querySelectorAll<HTMLButtonElement>('[data-game-card]')];
+      cards.forEach((card) => {
+        card.disabled = false;
+        card.classList.remove('is-flipped', 'is-matched');
+        flipDown(card);
+      });
+      cards
+        .map((card) => ({ card, order: Math.random() }))
+        .sort((a, b) => a.order - b.order)
+        .forEach(({ card }) => grid.append(card));
+      cards[0]?.focus();
+    };
+    game
+      .querySelector<HTMLButtonElement>('[data-game-restart]')
+      ?.addEventListener('click', restart);
+  }
+
+  function setupMenusAndReset(): void {
+    const menu = shell.querySelector<HTMLElement>('[data-system-menu]');
+    shell.querySelector<HTMLButtonElement>('[data-start-button]')?.addEventListener('click', () => {
+      if (menu) menu.hidden = !menu.hidden;
+    });
+    shell.querySelector<HTMLButtonElement>('[data-menu-close]')?.addEventListener('click', () => {
+      if (menu) menu.hidden = true;
+    });
+    shell.querySelector<HTMLButtonElement>('#reset-progress')?.addEventListener('click', () => {
+      if (!window.confirm('Reset opened files, reactions, and secret progress on this browser?'))
+        return;
+      try {
+        localStorage.removeItem(STORAGE_KEY);
+      } catch {
+        // State in this session is still reset even if persistent storage is blocked.
+      }
+      openedApps = new Set<AppId>();
+      reactions = {};
+      secretUnlocked = false;
+      progress = {};
+      allAppIds.forEach((appId) => closeWindow(appId, false));
+      shell.querySelectorAll<HTMLButtonElement>('[data-reaction]').forEach((button) => {
+        button.setAttribute('aria-pressed', 'false');
+      });
+      updateSecretProgress();
+      showToast('Local archive progress was reset. Your media files were not changed.');
+    });
+  }
+
+  function setupKeyboard(): void {
+    document.addEventListener('keydown', (event) => {
+      const boot = getScreen('boot');
+      if (!boot?.hidden && event.key === 'Enter') {
+        event.preventDefault();
+        finishBoot();
+        return;
+      }
+      if (event.key === 'Escape') {
+        const videoDialog = shell.querySelector<HTMLDialogElement>('[data-video-dialog]');
+        if (videoDialog?.open) return;
+        if (activeWindow) closeWindow(activeWindow);
+      }
+      if (event.key === 'Tab' && mobileWindows.matches && activeWindow) {
+        const appWindow = getWindow(activeWindow);
+        if (!appWindow || appWindow.hidden) return;
+        const focusable = [
+          ...appWindow.querySelectorAll<HTMLElement>(
+            'button:not([disabled]), a[href], video[controls], [tabindex]:not([tabindex="-1"])',
+          ),
+        ].filter((element) => !element.hidden);
+        if (focusable.length === 0) return;
+        const first = focusable[0];
+        const last = focusable[focusable.length - 1];
+        if (event.shiftKey && document.activeElement === first) {
+          event.preventDefault();
+          last?.focus();
+        } else if (!event.shiftKey && document.activeElement === last) {
+          event.preventDefault();
+          first?.focus();
+        }
+      }
+    });
+  }
+
+  function updateClock(): void {
+    const clock = shell.querySelector<HTMLTimeElement>('[data-system-clock]');
+    if (!clock) return;
+    const now = new Date();
+    clock.dateTime = now.toISOString();
+    clock.textContent = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+  }
+
+  shell.querySelector<HTMLButtonElement>('#enter-system')?.addEventListener('click', startBoot);
+  shell.querySelector<HTMLButtonElement>('#skip-boot')?.addEventListener('click', finishBoot);
+  shell.querySelector<HTMLButtonElement>('#open-final-letter')?.addEventListener('click', () => {
+    pauseVideos();
+    shell.querySelectorAll<HTMLDialogElement>('dialog[open]').forEach((dialog) => dialog.close());
+    showScreen('final');
+    shell.querySelector<HTMLElement>('[data-final-letter]')?.focus({ preventScroll: true });
+  });
+  shell.querySelector<HTMLButtonElement>('#return-to-desktop')?.addEventListener('click', () => {
+    pauseVideos(getScreen('final') ?? document);
+    showScreen('desktop');
+    shell.querySelector<HTMLButtonElement>('[data-app-launch="secret"]')?.focus();
+  });
+
+  setupWindowControls();
+  setupWindowDragging();
+  setupMemories();
+  setupVideos();
+  setupLoveReasons();
+  setupMemoryGame();
+  setupMenusAndReset();
+  setupKeyboard();
+  updateSecretProgress();
+  updateClock();
+  window.setInterval(updateClock, 30_000);
+</script>

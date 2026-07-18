@@ -1,0 +1,69 @@
+---
+import { memories } from '../../../data/wynkfuon';
+import { assetPath } from '../../../utils/assetPath';
+---
+
+<div class="memories-app" data-memories-app>
+  <div class="app-heading">
+    <div>
+      <p class="app-kicker">Random Memory Machine</p>
+      <h3>Recovered moments</h3>
+    </div>
+    <span class="file-count">{memories.length} files</span>
+  </div>
+
+  <div class="memory-stack">
+    {
+      memories.map((memory, index) => (
+        <article
+          class="memory-card"
+          data-memory-card
+          data-memory-id={memory.id}
+          data-memory-index={index}
+          hidden={index !== 0}
+        >
+          <figure class="memory-photo">
+            <img
+              src={assetPath(memory.image)}
+              alt={memory.alt}
+              width="1200"
+              height="800"
+              loading={index === 0 ? 'eager' : 'lazy'}
+              decoding="async"
+            />
+            <figcaption>{memory.date}</figcaption>
+          </figure>
+          <div class="memory-copy">
+            <p class="memory-number">Memory #{String(memory.number).padStart(3, '0')}</p>
+            <h4>{memory.title}</h4>
+            <p>{memory.caption}</p>
+          </div>
+          <div class="reaction-group" aria-label={`React to ${memory.title}`}>
+            <button type="button" data-reaction="forever" aria-pressed="false">
+              <span aria-hidden="true">♥</span> Keep forever
+            </button>
+            <button type="button" data-reaction="chaotic" aria-pressed="false">
+              <span aria-hidden="true">☄</span> Too chaotic
+            </button>
+            <button type="button" data-reaction="classified" aria-pressed="false">
+              <span aria-hidden="true">◉</span> Classified
+            </button>
+          </div>
+        </article>
+      ))
+    }
+  </div>
+
+  <div class="memory-controls" aria-label="Memory navigation">
+    <button class="icon-text-button" type="button" data-memory-action="previous">
+      <span aria-hidden="true">←</span> Previous
+    </button>
+    <button class="primary-app-button" type="button" data-memory-action="random">
+      <span aria-hidden="true">✦</span> Random memory
+    </button>
+    <button class="icon-text-button" type="button" data-memory-action="next">
+      Next <span aria-hidden="true">→</span>
+    </button>
+  </div>
+  <p class="sr-only" data-memory-announcer aria-live="polite"></p>
+</div>

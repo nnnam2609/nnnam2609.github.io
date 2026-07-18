@@ -1,0 +1,74 @@
+---
+import { videos } from '../../../data/wynkfuon';
+import { assetPath } from '../../../utils/assetPath';
+---
+
+<div class="videos-app" data-videos-app>
+  <div class="app-heading">
+    <div>
+      <p class="app-kicker">Chaotic Video Cinema</p>
+      <h3>Director's cut</h3>
+    </div>
+    <span class="file-count">{videos.length} tapes</span>
+  </div>
+
+  <div class="video-grid">
+    {
+      videos.map((video, index) => (
+        <article
+          class="video-card"
+          data-video-card
+          data-video-id={video.id}
+          data-video-title={video.title}
+          data-video-caption={video.caption ?? ''}
+          data-video-src={video.src ? assetPath(video.src) : ''}
+          data-video-poster={video.poster ? assetPath(video.poster) : ''}
+        >
+          <button type="button" data-video-open aria-label={`Open video: ${video.title}`}>
+            <span class="video-thumbnail">
+              {video.poster && (
+                <img
+                  src={assetPath(video.poster)}
+                  alt=""
+                  width="800"
+                  height="450"
+                  loading="lazy"
+                  decoding="async"
+                />
+              )}
+              <span class="video-play" aria-hidden="true">
+                ▶
+              </span>
+              <span class="video-duration" aria-hidden="true">
+                TAPE {index + 1}
+              </span>
+            </span>
+            <span class="video-copy">
+              <strong>{video.title}</strong>
+              <small>{video.caption}</small>
+            </span>
+          </button>
+        </article>
+      ))
+    }
+  </div>
+
+  <dialog class="video-dialog" data-video-dialog aria-labelledby="video-dialog-title">
+    <div class="video-dialog__header">
+      <p class="app-kicker">Now viewing</p>
+      <button type="button" data-video-close aria-label="Close video player">×</button>
+    </div>
+    <h4 id="video-dialog-title" data-video-dialog-title>Video title</h4>
+    <div class="video-stage">
+      <video controls playsinline preload="metadata" data-video-player hidden>
+        Your browser does not support the video element.
+      </video>
+      <div class="video-empty" data-video-empty>
+        <span aria-hidden="true">▻</span>
+        <strong>Video slot ready</strong>
+        <p>Copy a video into the asset folder and add its path in <code>videos.ts</code>.</p>
+      </div>
+    </div>
+    <p data-video-dialog-caption></p>
+  </dialog>
+</div>

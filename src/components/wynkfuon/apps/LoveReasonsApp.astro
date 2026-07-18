@@ -1,0 +1,31 @@
+---
+import { loveReasons } from '../../../data/wynkfuon';
+---
+
+<div class="love-reasons-app" data-love-reasons-app>
+  <div class="app-heading">
+    <div>
+      <p class="app-kicker">Reasons I Love You.exe</p>
+      <h3>Affection generator</h3>
+    </div>
+    <span class="status-chip"><span aria-hidden="true">♥</span> infinite</span>
+  </div>
+
+  <div class="reason-machine">
+    <div class="reason-lights" aria-hidden="true"><span></span><span></span><span></span></div>
+    <div class="reason-display" data-reason-display>
+      {
+        loveReasons.map((reason, index) => (
+          <div class="reason" data-reason data-reason-id={reason.id} hidden={index !== 0}>
+            <p>Reason #{reason.id}</p>
+            <blockquote>{reason.text}</blockquote>
+          </div>
+        ))
+      }
+    </div>
+    <button class="primary-app-button reason-button" type="button" data-generate-reason>
+      Generate another reason <span aria-hidden="true">↻</span>
+    </button>
+  </div>
+  <p class="sr-only" data-reason-announcer aria-live="polite"></p>
+</div>

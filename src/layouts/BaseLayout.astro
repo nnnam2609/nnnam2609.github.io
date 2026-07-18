@@ -26,6 +26,9 @@ const socialLinks = [
   siteProfile.scholar,
   siteProfile.orcid,
 ].filter((value): value is string => Boolean(value));
+const emailAddresses = [siteProfile.email, siteProfile.personalEmail].filter(
+  (value): value is string => Boolean(value),
+);
 const personSchema = {
   '@context': 'https://schema.org',
   '@type': 'Person',
@@ -42,7 +45,7 @@ const personSchema = {
     name: siteProfile.affiliation,
   },
   knowsAbout: [...siteProfile.researchInterests, ...siteProfile.engineeringInterests],
-  ...(siteProfile.email ? { email: siteProfile.email } : {}),
+  ...(emailAddresses.length > 0 ? { email: emailAddresses } : {}),
   ...(socialLinks.length > 0 ? { sameAs: socialLinks } : {}),
 };
 ---

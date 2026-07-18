@@ -9,6 +9,7 @@ export interface SiteProfile {
   researchInterests: string[];
   engineeringInterests: string[];
   email?: string;
+  personalEmail?: string;
   github?: string;
   linkedin?: string;
   scholar?: string;
@@ -42,7 +43,10 @@ export const siteProfile: SiteProfile = {
     'Research software',
     'Solo technology entrepreneurship',
   ],
-  // TODO: Add verified email and social profile URLs when available.
+  email: 'nhat-nam.nguyen@loria.fr',
+  personalEmail: 'nnnam2609@gmail.com',
+  github: 'https://github.com/nnnam2609',
+  // TODO: Add verified LinkedIn, Scholar, and ORCID URLs when available.
 };
 
 export const navigation = [

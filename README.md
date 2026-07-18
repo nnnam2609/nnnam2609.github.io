@@ -6,13 +6,13 @@ strict TypeScript, content collections, and a small amount of progressive enhanc
 preference.
 
 > [!IMPORTANT]
-> **Repository identity mismatch:** the repository name is correctly `nhatnam.github.io`, but its
-> current GitHub owner is `nnnam2609`, not `nhatnam`. The requested production URL
-> `https://nhatnam.github.io` is therefore not available from this remote as currently owned. Astro is
-> intentionally configured with the requested canonical `site` value and no base path. Before enabling
-> production deployment, transfer or recreate the repository as `nhatnam/nhatnam.github.io`. Do not
-> work around this mismatch by adding `/nhatnam.github.io` as a base path; that would configure a
-> different deployment target.
+> **Repository identity mismatch:** the verified GitHub profile is `nnnam2609`, while this repository
+> is named `nhatnam.github.io`. It cannot serve the requested root URL `https://nhatnam.github.io` from
+> the current account. The recommended GitHub user-site option is to rename the repository to
+> `nnnam2609.github.io` and update the canonical site URL to `https://nnnam2609.github.io`. Keeping the
+> original URL instead requires a GitHub account or organization named `nhatnam`. A project-site
+> deployment from the current repository would use `/nhatnam.github.io` as a base path and is a
+> different deployment target, so it is not configured silently.
 
 ## Technology choices
 
@@ -148,8 +148,9 @@ intentionally absent until verified information is supplied.
 Set verified optional values in `src/data/site.ts`:
 
 ```ts
-email: '...',
-github: 'https://github.com/...',
+email: 'nhat-nam.nguyen@loria.fr',
+personalEmail: 'nnnam2609@gmail.com',
+github: 'https://github.com/nnnam2609',
 linkedin: 'https://www.linkedin.com/in/...',
 scholar: 'https://scholar.google.com/...',
 orcid: 'https://orcid.org/...',
@@ -170,12 +171,12 @@ It runs on pushes to `main` and can be launched manually with `workflow_dispatch
 limited to reading repository contents and writing a verified Pages deployment. Concurrency allows an
 in-progress production deployment to finish before a later deployment starts.
 
-One-time repository setup after the ownership mismatch is resolved:
+One-time repository setup after choosing and configuring the final URL:
 
-1. Open **Settings → Pages** in `nhatnam/nhatnam.github.io`.
+1. Open **Settings → Pages** in the final user-site repository.
 2. Under **Build and deployment → Source**, select **GitHub Actions**.
 3. Merge a reviewed change to `main` or run the workflow manually.
-4. Confirm the deployment reports `https://nhatnam.github.io`.
+4. Confirm the deployment reports the same URL configured in `astro.config.mjs`.
 
 The site configuration is:
 
@@ -234,12 +235,12 @@ enabled, and the workflow has access to the `github-pages` environment. Review b
 
 ## Information still required
 
-- [ ] Email
-- [ ] GitHub profile URL
+- [x] Email — LORIA and personal
+- [x] GitHub profile URL — `https://github.com/nnnam2609`
 - [ ] LinkedIn URL
-- [ ] Google Scholar URL
-- [ ] ORCID
+- [ ] Google Scholar URL — not available yet
+- [ ] ORCID — not available yet
 - [ ] Profile photograph
 - [ ] CV PDF
-- [ ] Verified publication list
-- [ ] Verified project repository links
+- [ ] Verified publication list — coming soon
+- [ ] Verified project repository links — repositories are not public yet

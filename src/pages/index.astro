@@ -16,7 +16,11 @@ const featuredPublications = (await getPublications())
   .filter(({ data }) => data.featured)
   .sort((a, b) => b.data.year - a.data.year);
 const contactLinks = [
-  siteProfile.email && { href: `mailto:${siteProfile.email}`, label: 'Send an email' },
+  siteProfile.email && { href: `mailto:${siteProfile.email}`, label: 'Email at LORIA' },
+  siteProfile.personalEmail && {
+    href: `mailto:${siteProfile.personalEmail}`,
+    label: 'Personal email',
+  },
   siteProfile.github && { href: siteProfile.github, label: 'GitHub profile' },
   siteProfile.linkedin && { href: siteProfile.linkedin, label: 'LinkedIn profile' },
 ].filter(Boolean) as { href: string; label: string }[];

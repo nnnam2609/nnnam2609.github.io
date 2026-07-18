@@ -1,0 +1,270 @@
+---
+import { navigation, siteProfile } from '../../data/site';
+---
+
+<button class="command-trigger" type="button" data-command-trigger aria-haspopup="dialog">
+  <span>Navigate</span>
+  <kbd><span class="command-symbol">⌘</span><span class="control-symbol">Ctrl</span> K</kbd>
+</button>
+
+<dialog class="command-dialog" data-command-dialog aria-labelledby="command-title">
+  <div class="command-shell">
+    <header>
+      <div>
+        <p class="eyebrow">Quick navigation</p>
+        <h2 id="command-title">Where would you like to go?</h2>
+      </div>
+      <form method="dialog">
+        <button class="dialog-close" value="close" aria-label="Close command palette">×</button>
+      </form>
+    </header>
+
+    <nav aria-label="Command palette navigation">
+      <ul role="list">
+        {
+          navigation.slice(1).map(({ href, label }, index) => (
+            <li>
+              <a href={href}>
+                <span>{label === 'CV' ? 'Open CV' : `Go to ${label}`}</span>
+                <kbd>{index + 1}</kbd>
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </nav>
+
+    <div class="command-actions">
+      {
+        siteProfile.email && (
+          <button type="button" data-copy-email={siteProfile.email}>
+            Copy email
+          </button>
+        )
+      }
+      <button type="button" data-command-theme>Toggle theme</button>
+    </div>
+    <p class="command-status" aria-live="polite" data-command-status></p>
+  </div>
+</dialog>
+
+<script>
+  const dialog = document.querySelector<HTMLDialogElement>('[data-command-dialog]');
+  const trigger = document.querySelector<HTMLButtonElement>('[data-command-trigger]');
+  const status = dialog?.querySelector<HTMLElement>('[data-command-status]');
+
+  const openPalette = () => {
+    if (!dialog?.open) dialog?.showModal();
+  };
+
+  trigger?.addEventListener('click', openPalette);
+
+  document.addEventListener('keydown', (event) => {
+    const target = event.target as HTMLElement | null;
+    const isTyping = target?.matches('input, textarea, select, [contenteditable="true"]');
+
+    if (event.key === 'Escape' && dialog?.open) {
+      event.preventDefault();
+      dialog.close();
+      return;
+    }
+
+    if ((event.metaKey || event.ctrlKey) && event.key.toLowerCase() === 'k' && !isTyping) {
+      event.preventDefault();
+      openPalette();
+    }
+  });
+
+  dialog?.addEventListener('click', (event) => {
+    if (event.target === dialog) dialog.close();
+  });
+
+  dialog?.addEventListener('close', () => trigger?.focus());
+
+  dialog
+    ?.querySelector<HTMLButtonElement>('[data-command-theme]')
+    ?.addEventListener('click', () => {
+      document.querySelector<HTMLButtonElement>('.theme-toggle')?.click();
+      dialog.close();
+    });
+
+  dialog
+    ?.querySelector<HTMLButtonElement>('[data-copy-email]')
+    ?.addEventListener('click', async (event) => {
+      const button = event.currentTarget as HTMLButtonElement;
+      const email = button.dataset.copyEmail;
+      if (!email) return;
+
+      try {
+        await navigator.clipboard.writeText(email);
+        if (status) status.textContent = 'Email copied to clipboard.';
+        button.textContent = 'Email copied';
+      } catch {
+        if (status) status.textContent = `Email: ${email}`;
+      }
+    });
+</script>
+
+<style>
+  .command-trigger {
+    display: none;
+    min-height: 40px;
+    padding: 0.35rem 0.45rem 0.35rem 0.7rem;
+    gap: 0.65rem;
+    align-items: center;
+    border: 1px solid var(--line);
+    border-radius: 7px;
+    background: transparent;
+    color: var(--ink-soft);
+    cursor: pointer;
+    font: inherit;
+    font-size: 0.76rem;
+    font-weight: 700;
+  }
+
+  .command-trigger:hover {
+    border-color: var(--line-strong);
+    background: var(--accent-soft);
+    color: var(--ink);
+  }
+
+  kbd {
+    padding: 0.14rem 0.38rem;
+    border: 1px solid var(--line);
+    border-radius: 4px;
+    background: var(--paper-raised);
+    color: var(--ink-soft);
+    font-family: var(--font-mono);
+    font-size: 0.62rem;
+    font-weight: 700;
+    box-shadow: 0 1px 0 var(--line-strong);
+  }
+
+  .control-symbol {
+    display: none;
+  }
+
+  .command-dialog {
+    width: min(42rem, calc(100% - 2rem));
+    max-height: min(42rem, calc(100dvh - 2rem));
+    padding: 0;
+    overflow: auto;
+    border: 1px solid var(--line-strong);
+    border-radius: calc(var(--radius) * 1.3);
+    background: var(--paper-raised);
+    color: var(--ink);
+    box-shadow: 0 30px 90px rgb(0 0 0 / 30%);
+  }
+
+  .command-dialog::backdrop {
+    background: rgb(5 18 25 / 58%);
+    backdrop-filter: blur(5px);
+  }
+
+  .command-shell {
+    display: grid;
+    padding: clamp(1.1rem, 4vw, 1.8rem);
+    gap: 1rem;
+  }
+
+  header {
+    display: flex;
+    gap: 1rem;
+    align-items: start;
+    justify-content: space-between;
+  }
+
+  header > div {
+    display: grid;
+    gap: 0.5rem;
+  }
+
+  h2 {
+    font-size: clamp(1.35rem, 4vw, 1.9rem);
+  }
+
+  .dialog-close {
+    display: grid;
+    width: 42px;
+    height: 42px;
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    background: transparent;
+    color: var(--ink);
+    cursor: pointer;
+    font: inherit;
+    font-size: 1.45rem;
+    place-items: center;
+  }
+
+  nav {
+    border-block: 1px solid var(--line);
+  }
+
+  nav a {
+    display: flex;
+    min-height: 48px;
+    padding: 0.55rem 0.65rem;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid var(--line);
+    color: var(--ink);
+    font-weight: 700;
+    text-decoration: none;
+  }
+
+  nav li:last-child a {
+    border-bottom: 0;
+  }
+
+  nav a:hover {
+    background: var(--accent-soft);
+    color: var(--accent-strong);
+  }
+
+  .command-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6rem;
+  }
+
+  .command-actions button {
+    min-height: 42px;
+    padding: 0.5rem 0.75rem;
+    border: 1px solid var(--line);
+    border-radius: 7px;
+    background: transparent;
+    color: var(--ink);
+    cursor: pointer;
+    font: inherit;
+    font-size: 0.78rem;
+    font-weight: 700;
+  }
+
+  .command-actions button:hover {
+    background: var(--accent-soft);
+  }
+
+  .command-status {
+    min-height: 1.2em;
+    color: var(--ink-soft);
+    font-family: var(--font-mono);
+    font-size: 0.68rem;
+  }
+
+  @media (min-width: 70rem) {
+    .command-trigger {
+      display: inline-flex;
+    }
+  }
+
+  @media (hover: none) {
+    .command-symbol {
+      display: none;
+    }
+
+    .control-symbol {
+      display: inline;
+    }
+  }
+</style>

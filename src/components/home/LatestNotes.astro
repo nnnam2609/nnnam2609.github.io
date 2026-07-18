@@ -1,0 +1,133 @@
+---
+import type { CollectionEntry } from 'astro:content';
+
+interface Props {
+  notes: CollectionEntry<'notes'>[];
+}
+
+const { notes } = Astro.props;
+const dateFormatter = new Intl.DateTimeFormat('en', { dateStyle: 'medium' });
+---
+
+<section class="section" aria-labelledby="latest-notes-title">
+  <div class="container">
+    <div class="section-heading-row">
+      <div class="section-heading">
+        <p class="eyebrow">Latest notes</p>
+        <h2 id="latest-notes-title">Research, documented carefully</h2>
+      </div>
+      {
+        notes.length > 0 && (
+          <a class="text-link" href="/notes/">
+            View all notes
+          </a>
+        )
+      }
+    </div>
+
+    {
+      notes.length > 0 ? (
+        <ol class="notes-grid" role="list">
+          {notes.map((note) => (
+            <li>
+              <article>
+                <time datetime={note.data.publishedAt.toISOString()}>
+                  {dateFormatter.format(note.data.publishedAt)}
+                </time>
+                <h3>
+                  <a href={`/notes/${note.id}/`}>{note.data.title}</a>
+                </h3>
+                <p>{note.data.description}</p>
+              </article>
+            </li>
+          ))}
+        </ol>
+      ) : (
+        <div class="notes-empty">
+          <div class="empty-wave" aria-hidden="true">
+            <svg viewBox="0 0 260 76" focusable="false">
+              <path d="M6 40h22l10-14 12 30 13-48 14 67 14-52 14 34 14-17 15 2 14-11 15 20 14-33 15 47 14-29 14 12h21" />
+            </svg>
+          </div>
+          <div>
+            <h3>Notes are being prepared for public release.</h3>
+            <p>No draft or placeholder writing is published here.</p>
+          </div>
+          <a class="text-link" href="/notes/">
+            Open the notebook
+          </a>
+        </div>
+      )
+    }
+  </div>
+</section>
+
+<style>
+  .notes-grid {
+    display: grid;
+    gap: 1rem;
+  }
+
+  .notes-grid article,
+  .notes-empty {
+    padding: 1.4rem;
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    background: var(--paper-raised);
+  }
+
+  .notes-grid article {
+    display: grid;
+    gap: 0.75rem;
+  }
+
+  time {
+    color: var(--ink-soft);
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+  }
+
+  .notes-grid h3 a {
+    color: var(--ink);
+    text-decoration: none;
+  }
+
+  .notes-grid p,
+  .notes-empty p {
+    color: var(--ink-soft);
+  }
+
+  .notes-empty {
+    display: grid;
+    gap: 1.5rem;
+    align-items: center;
+  }
+
+  .notes-empty > div:nth-child(2) {
+    display: grid;
+    gap: 0.45rem;
+  }
+
+  .empty-wave svg {
+    width: min(100%, 16rem);
+  }
+
+  .empty-wave path {
+    fill: none;
+    stroke: var(--accent-strong);
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    stroke-width: 2.5;
+    vector-effect: non-scaling-stroke;
+  }
+
+  @media (min-width: 48rem) {
+    .notes-grid {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .notes-empty {
+      grid-template-columns: minmax(10rem, 0.55fr) minmax(16rem, 1fr) auto;
+    }
+  }
+</style>

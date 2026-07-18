@@ -9,16 +9,23 @@
 html {
   scroll-behavior: smooth;
   scrollbar-gutter: stable;
+  scroll-padding-top: 6rem;
 }
 
 body {
   margin: 0;
+  overflow-x: clip;
   background: var(--paper);
   color: var(--ink);
   font-family: var(--font-sans);
   font-size: 1rem;
   line-height: 1.65;
   text-rendering: optimizeLegibility;
+}
+
+::selection {
+  background: var(--accent);
+  color: var(--paper-raised);
 }
 
 body::before {
@@ -56,6 +63,13 @@ a {
   -webkit-tap-highlight-color: transparent;
 }
 
+button,
+input,
+textarea,
+select {
+  font: inherit;
+}
+
 :focus-visible {
   outline: 3px solid var(--signal);
   outline-offset: 4px;
@@ -72,7 +86,7 @@ h3 {
 }
 
 h1 {
-  font-size: clamp(2.6rem, 7vw, 4.8rem);
+  font-size: clamp(2.6rem, 7vw, 5.1rem);
 }
 
 h2 {
@@ -145,6 +159,8 @@ ol[role='list'] {
 
 .section {
   padding-block: clamp(4rem, 9vw, 7.5rem);
+  content-visibility: auto;
+  contain-intrinsic-size: 1px 760px;
 }
 
 .section + .section {
@@ -206,11 +222,17 @@ ol[role='list'] {
   color: var(--paper-raised);
   font-weight: 700;
   text-decoration: none;
+  transition:
+    background-color 160ms ease,
+    border-color 160ms ease,
+    color 160ms ease,
+    transform 160ms ease;
 }
 
 .button:hover {
   background: var(--accent);
   color: var(--paper-raised);
+  transform: translateY(-1px);
 }
 
 .button.secondary {
@@ -310,6 +332,16 @@ ol[role='list'] {
 @media (max-width: 41.99rem) {
   .section-heading-row {
     display: grid;
+  }
+}
+
+@media (max-width: 22rem) {
+  .container {
+    width: min(100% - 1.25rem, var(--content));
+  }
+
+  .button {
+    width: 100%;
   }
 }
 

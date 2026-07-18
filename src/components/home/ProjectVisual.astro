@@ -1,0 +1,183 @@
+---
+interface Props {
+  projectId: string;
+}
+
+const { projectId } = Astro.props;
+---
+
+<div class:list={['project-visual', `visual-${projectId}`]} aria-hidden="true">
+  {
+    projectId === 'speaker-independent-aai' && (
+      <svg viewBox="0 0 520 230" focusable="false">
+        <path
+          class="grid"
+          d="M20 45H500M20 90H500M20 135H500M20 180H500M80 20V210M160 20V210M240 20V210M320 20V210M400 20V210M480 20V210"
+        />
+        <path
+          class="wave"
+          d="M34 118h17l10-25 12 54 14-91 14 126 15-96 15 63 14-32 15 5 14-22 15 39 14-61 15 88 15-55 15 24h13"
+        />
+        <path class="arrow" d="M267 116H319m-13-13 13 13-13 13" />
+        <path
+          class="contour"
+          d="M371 52c63-12 111 36 106 91-3 39-29 69-64 81-29 10-61 2-77-21-13-20-7-46 13-58 17-10 39-3 47 14 6 13 0 29-14 35"
+        />
+        <circle class="point" cx="371" cy="52" r="5" />
+        <circle class="point" cx="477" cy="143" r="5" />
+      </svg>
+    )
+  }
+  {
+    projectId === 'vocal-tract-grid-normalization' && (
+      <svg viewBox="0 0 520 230" focusable="false">
+        <g class="before-grid">
+          <path d="M35 58L206 43M39 102L210 91M43 146L214 139M47 190L218 187M52 37L32 201M98 33L80 197M144 29L128 193M190 25L176 189" />
+          <path class="shape" d="M74 71c54-37 107-8 112 38 5 37-18 68-61 82" />
+        </g>
+        <path class="swap" d="M236 94h47l-11-11m11 11-11 11M283 142h-47l11-11m-11 11 11 11" />
+        <g class="after-grid">
+          <path d="M310 50H485M310 96H485M310 142H485M310 188H485M335 30V208M377 30V208M419 30V208M461 30V208" />
+          <path class="shape" d="M345 70c43-25 90-4 99 36 9 38-14 68-55 84" />
+        </g>
+        <text x="86" y="218">
+          before
+        </text>
+        <text x="383" y="218">
+          normalized
+        </text>
+      </svg>
+    )
+  }
+  {
+    projectId === 'mri-video-jepa' && (
+      <svg viewBox="0 0 520 230" focusable="false">
+        <g class="frames">
+          <rect x="28" y="52" width="92" height="112" rx="9" />
+          <rect x="44" y="68" width="92" height="112" rx="9" />
+          <rect x="60" y="84" width="92" height="112" rx="9" />
+          <path d="M88 105c34-9 55 16 52 41-2 18-16 31-32 36" />
+        </g>
+        <path class="arrow" d="M171 123H222m-13-13 13 13-13 13" />
+        <rect class="encoder" x="238" y="80" width="88" height="86" rx="14" />
+        <path class="encoder-mark" d="M262 106h40M262 123h40M262 140h40" />
+        <path class="arrow" d="M342 123H381m-13-13 13 13-13 13" />
+        <g class="tokens">
+          <rect x="398" y="70" width="30" height="105" rx="6" />
+          <rect x="436" y="90" width="30" height="85" rx="6" />
+          <rect x="474" y="55" width="30" height="120" rx="6" />
+        </g>
+      </svg>
+    )
+  }
+</div>
+
+<style>
+  .project-visual {
+    overflow: hidden;
+    min-height: 10.5rem;
+    border-bottom: 1px solid var(--line);
+    background:
+      linear-gradient(var(--line) 1px, transparent 1px),
+      linear-gradient(90deg, var(--line) 1px, transparent 1px), var(--paper);
+    background-size: 44px 44px;
+  }
+
+  svg {
+    width: 100%;
+    min-height: 10.5rem;
+  }
+
+  :global(.project-visual path),
+  :global(.project-visual rect) {
+    vector-effect: non-scaling-stroke;
+  }
+
+  .grid {
+    fill: none;
+    stroke: var(--line);
+    opacity: 0.56;
+  }
+
+  .wave,
+  .contour,
+  .shape,
+  .swap,
+  .arrow,
+  .before-grid,
+  .after-grid,
+  .frames path,
+  .encoder-mark {
+    fill: none;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  .wave,
+  .contour,
+  .shape {
+    stroke: var(--accent-strong);
+    stroke-width: 2.5;
+  }
+
+  .arrow,
+  .swap {
+    stroke: var(--signal);
+    stroke-width: 2;
+  }
+
+  .point {
+    fill: var(--signal);
+  }
+
+  .before-grid,
+  .after-grid {
+    stroke: var(--line-strong);
+  }
+
+  .before-grid {
+    opacity: 0.72;
+  }
+
+  .after-grid {
+    stroke: var(--accent);
+  }
+
+  text {
+    fill: var(--ink-soft);
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: 0.08em;
+    text-anchor: middle;
+    text-transform: uppercase;
+  }
+
+  .frames rect {
+    fill: var(--paper-raised);
+    stroke: var(--line-strong);
+  }
+
+  .frames path {
+    stroke: var(--accent-strong);
+    stroke-width: 2;
+  }
+
+  .encoder {
+    fill: var(--accent-soft);
+    stroke: var(--accent);
+    stroke-width: 2;
+  }
+
+  .encoder-mark {
+    stroke: var(--accent-strong);
+  }
+
+  .tokens rect {
+    fill: var(--accent);
+    opacity: 0.72;
+  }
+
+  .tokens rect:nth-child(2) {
+    fill: var(--signal);
+  }
+</style>

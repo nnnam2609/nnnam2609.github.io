@@ -1,6 +1,7 @@
 ---
 import { siteProfile } from '../../data/site';
 import ThemeToggle from '../ThemeToggle.astro';
+import CommandPalette from './CommandPalette.astro';
 import Navigation from './Navigation.astro';
 
 interface Props {
@@ -18,6 +19,7 @@ const { pathname } = Astro.props;
     </a>
     <div class="header-actions">
       <Navigation {pathname} />
+      <CommandPalette />
       <ThemeToggle />
     </div>
   </div>
@@ -25,11 +27,12 @@ const { pathname } = Astro.props;
 
 <style>
   .site-header {
-    position: relative;
+    position: sticky;
     z-index: 30;
+    top: 0;
     border-bottom: 1px solid var(--line);
     background: color-mix(in srgb, var(--paper) 92%, transparent);
-    backdrop-filter: blur(12px);
+    backdrop-filter: blur(16px);
   }
 
   .header-inner {

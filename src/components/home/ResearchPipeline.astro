@@ -1,0 +1,390 @@
+---
+import { homeOptions, researchPipeline } from '../../data/home';
+---
+
+<section
+  class="section pipeline-section"
+  aria-labelledby="pipeline-title"
+  data-pipeline
+  data-motion={homeOptions.enableMotion ? 'on' : 'off'}
+>
+  <div class="container">
+    <div class="section-heading pipeline-heading">
+      <p class="eyebrow">Research pipeline</p>
+      <h2 id="pipeline-title">Observe the signal. Understand the anatomy. Reconstruct motion.</h2>
+      <p class="lede">
+        A compact view of the research process—not a literal model architecture, but the path from
+        synchronized evidence to articulatory estimates.
+      </p>
+    </div>
+
+    <div class="pipeline-layout">
+      <ol class="pipeline-steps" role="list">
+        {
+          researchPipeline.map((step, index) => (
+            <li class:list={['pipeline-step', { active: index === 0 }]} data-pipeline-step={index}>
+              <span class="step-number">{step.number}</span>
+              <div>
+                <h3>{step.title}</h3>
+                <p>{step.description}</p>
+                <span class="step-label">{step.label}</span>
+              </div>
+            </li>
+          ))
+        }
+      </ol>
+
+      <div class="pipeline-visual" aria-hidden="true" data-pipeline-visual>
+        <svg viewBox="0 0 620 500" focusable="false">
+          <g class="pipeline-grid">
+            <path d="M60 80H560M60 140H560M60 200H560M60 260H560M60 320H560M60 380H560M60 440H560"
+            ></path>
+            <path
+              d="M80 60V460M140 60V460M200 60V460M260 60V460M320 60V460M380 60V460M440 60V460M500 60V460M560 60V460"
+            ></path>
+          </g>
+
+          <g class="visual-state active" data-pipeline-state="0">
+            <rect class="mri-frame" x="288" y="84" width="230" height="230" rx="18"></rect>
+            <path
+              class="mri-contour"
+              d="M378 120c60-15 111 29 111 84 0 42-30 77-71 84-29 5-60-7-74-31-12-21-6-49 14-62 18-12 43-7 53 10 8 15 1 35-15 42"
+            ></path>
+            <path
+              class="audio-wave"
+              d="M78 386h18l12-28 14 59 16-99 17 138 17-111 17 74 17-37 18 4 16-18 16 35 16-63 17 94 17-58 16 21h24"
+            ></path>
+            <path class="sync-line" d="M338 354V324M418 354V324"></path>
+            <circle class="scan-point" cx="378" cy="120" r="5"></circle>
+            <circle class="scan-point" cx="489" cy="204" r="5"></circle>
+          </g>
+
+          <g class="visual-state" data-pipeline-state="1">
+            <g class="speaker-grid source-grid">
+              <path
+                d="M92 125H252M92 175H252M92 225H252M92 275H252M112 105V295M152 105V295M192 105V295M232 105V295"
+              ></path>
+              <path class="source-shape" d="M117 141c45-30 99-7 109 36 10 42-16 77-62 88"></path>
+            </g>
+            <path class="transform-arrow" d="M270 202H350m-15-15 15 15-15 15"></path>
+            <g class="speaker-grid target-grid">
+              <path
+                d="M370 125H530M370 175H530M370 225H530M370 275H530M390 105V295M430 105V295M470 105V295M510 105V295"
+              ></path>
+              <path class="target-shape" d="M404 140c38-19 84-1 94 35 11 41-13 74-54 91"></path>
+            </g>
+            <g class="representation-row">
+              <rect x="150" y="360" width="38" height="58" rx="6"></rect>
+              <rect x="198" y="342" width="38" height="76" rx="6"></rect>
+              <rect x="246" y="371" width="38" height="47" rx="6"></rect>
+              <rect x="294" y="330" width="38" height="88" rx="6"></rect>
+              <rect x="342" y="354" width="38" height="64" rx="6"></rect>
+              <rect x="390" y="365" width="38" height="53" rx="6"></rect>
+            </g>
+          </g>
+
+          <g class="visual-state" data-pipeline-state="2">
+            <path
+              class="input-wave"
+              d="M70 240h16l11-29 14 65 15-113 16 158 17-124 17 79 17-42 16 6 15-25 16 48 15-79 17 116 16-73 17 31h20"
+            ></path>
+            <path class="model-arrow" d="M310 240H370m-15-15 15 15-15 15"></path>
+            <g class="model-block">
+              <rect x="230" y="344" width="164" height="70" rx="14"></rect>
+              <circle cx="263" cy="379" r="7"></circle>
+              <circle cx="312" cy="379" r="7"></circle>
+              <circle cx="361" cy="379" r="7"></circle>
+              <path d="M270 379H305M319 379H354"></path>
+            </g>
+            <g class="predicted-contour">
+              <path
+                d="M426 115c79-15 135 48 126 116-6 49-40 85-82 103-38 16-81 8-102-23-17-25-10-60 15-75 22-13 51-5 61 16 8 18-1 39-21 45"
+              ></path>
+              <path d="M451 145c48-6 83 30 80 72-2 31-21 55-48 69"></path>
+              <circle cx="426" cy="115" r="5"></circle>
+              <circle cx="552" cy="231" r="5"></circle>
+              <circle cx="368" cy="311" r="5"></circle>
+            </g>
+          </g>
+        </svg>
+        <div class="visual-readout">
+          {
+            researchPipeline.map((step, index) => (
+              <span class:list={{ active: index === 0 }}>{step.label}</span>
+            ))
+          }
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  document.querySelectorAll<HTMLElement>('[data-pipeline]').forEach((pipeline) => {
+    const steps = Array.from(pipeline.querySelectorAll<HTMLElement>('[data-pipeline-step]'));
+    const states = Array.from(pipeline.querySelectorAll<SVGGElement>('[data-pipeline-state]'));
+    const labels = Array.from(pipeline.querySelectorAll<HTMLElement>('.visual-readout span'));
+
+    const activate = (index: number) => {
+      steps.forEach((step, stepIndex) => step.classList.toggle('active', stepIndex === index));
+      states.forEach((state, stateIndex) => state.classList.toggle('active', stateIndex === index));
+      labels.forEach((label, labelIndex) => label.classList.toggle('active', labelIndex === index));
+    };
+
+    if (pipeline.dataset.motion === 'off' || !('IntersectionObserver' in window)) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const visible = entries
+          .filter((entry) => entry.isIntersecting)
+          .sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
+        if (!visible) return;
+        activate(Number((visible.target as HTMLElement).dataset.pipelineStep ?? 0));
+      },
+      { rootMargin: '-22% 0px -46% 0px', threshold: [0.25, 0.55, 0.8] },
+    );
+
+    steps.forEach((step) => observer.observe(step));
+  });
+</script>
+
+<style>
+  .pipeline-section {
+    background: var(--paper-raised);
+  }
+
+  .pipeline-heading {
+    max-width: 58rem;
+  }
+
+  .pipeline-layout {
+    display: grid;
+    gap: 2.5rem;
+  }
+
+  .pipeline-steps {
+    display: grid;
+  }
+
+  .pipeline-step {
+    display: grid;
+    min-height: 15rem;
+    padding-block: 2rem;
+    gap: 1rem;
+    align-content: center;
+    border-top: 1px solid var(--line);
+    color: var(--ink-soft);
+    grid-template-columns: 2.6rem 1fr;
+    opacity: 0.58;
+    transition:
+      opacity 240ms ease,
+      transform 240ms ease;
+  }
+
+  .pipeline-step:last-child {
+    border-bottom: 1px solid var(--line);
+  }
+
+  .pipeline-step.active {
+    color: var(--ink);
+    opacity: 1;
+    transform: translateX(0.45rem);
+  }
+
+  .step-number,
+  .step-label {
+    color: var(--accent-strong);
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .pipeline-step > div {
+    display: grid;
+    gap: 0.75rem;
+  }
+
+  .pipeline-step h3 {
+    font-size: clamp(1.5rem, 3vw, 2.2rem);
+  }
+
+  .pipeline-step p {
+    max-width: 38rem;
+  }
+
+  .pipeline-visual {
+    position: relative;
+    align-self: start;
+    overflow: hidden;
+    border: 1px solid var(--line);
+    border-radius: calc(var(--radius) * 1.5);
+    background: var(--paper);
+    box-shadow: var(--shadow);
+  }
+
+  .pipeline-visual svg {
+    width: 100%;
+  }
+
+  .pipeline-grid,
+  .speaker-grid,
+  .source-shape,
+  .target-shape,
+  .transform-arrow,
+  .audio-wave,
+  .sync-line,
+  .mri-contour,
+  .input-wave,
+  .model-arrow,
+  .model-block path,
+  .predicted-contour {
+    fill: none;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    vector-effect: non-scaling-stroke;
+  }
+
+  .pipeline-grid {
+    stroke: var(--line);
+    opacity: 0.42;
+  }
+
+  .visual-state {
+    opacity: 0;
+    transform: translateY(14px);
+    transform-origin: center;
+    transition:
+      opacity 280ms ease,
+      transform 280ms ease;
+  }
+
+  .visual-state.active {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .mri-frame {
+    fill: var(--ink);
+    opacity: 0.94;
+  }
+
+  .mri-contour,
+  .audio-wave,
+  .input-wave {
+    stroke: var(--accent-strong);
+    stroke-width: 3;
+  }
+
+  .mri-contour {
+    stroke: var(--paper-raised);
+  }
+
+  .sync-line,
+  .transform-arrow,
+  .model-arrow {
+    stroke: var(--signal);
+    stroke-width: 2;
+  }
+
+  .scan-point,
+  .predicted-contour circle {
+    fill: var(--signal);
+  }
+
+  .speaker-grid {
+    stroke: var(--line-strong);
+    stroke-width: 1;
+  }
+
+  .source-grid {
+    transform: skewY(-5deg);
+  }
+
+  .target-grid {
+    stroke: var(--accent);
+  }
+
+  .source-shape,
+  .target-shape,
+  .predicted-contour {
+    stroke: var(--ink);
+    stroke-width: 2.5;
+  }
+
+  .target-shape {
+    stroke: var(--accent-strong);
+  }
+
+  .representation-row rect {
+    fill: var(--accent);
+    opacity: 0.76;
+  }
+
+  .representation-row rect:nth-child(2n) {
+    fill: var(--signal);
+  }
+
+  .model-block rect {
+    fill: var(--accent-soft);
+    stroke: var(--accent);
+    stroke-width: 2;
+  }
+
+  .model-block circle {
+    fill: var(--accent-strong);
+  }
+
+  .model-block path {
+    stroke: var(--line-strong);
+  }
+
+  .visual-readout {
+    position: absolute;
+    right: 1.2rem;
+    bottom: 1.2rem;
+    left: 1.2rem;
+    min-height: 1.1rem;
+    color: var(--accent-strong);
+    font-family: var(--font-mono);
+    font-size: 0.68rem;
+    font-weight: 800;
+    letter-spacing: 0.1em;
+    text-align: right;
+    text-transform: uppercase;
+  }
+
+  .visual-readout span {
+    display: none;
+  }
+
+  .visual-readout span.active {
+    display: block;
+  }
+
+  @media (min-width: 60rem) {
+    .pipeline-layout {
+      grid-template-columns: minmax(23rem, 0.82fr) minmax(32rem, 1.18fr);
+      gap: clamp(3rem, 7vw, 6rem);
+    }
+
+    .pipeline-visual {
+      position: sticky;
+      top: 7.5rem;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .pipeline-step,
+    .visual-state {
+      transform: none;
+    }
+  }
+
+  .pipeline-section[data-motion='off'] .pipeline-step,
+  .pipeline-section[data-motion='off'] .visual-state {
+    transition: none;
+    transform: none;
+  }
+</style>

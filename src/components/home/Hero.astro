@@ -1,74 +1,89 @@
 ---
 import { siteProfile } from '../../data/site';
 import { cvPath } from '../../utils/cv';
+import SoundToShapeVisual from './SoundToShapeVisual.astro';
 ---
 
 <section class="hero">
   <div class="container hero-grid">
     <div class="hero-copy">
-      <p class="eyebrow">Researcher / builder · Nancy, France</p>
-      <div>
-        <p class="name">{siteProfile.name}</p>
-        <h1>{siteProfile.headline}</h1>
+      <div class="researcher-id">
+        <img
+          class="profile-mark"
+          src="/profile-nhat-nam.webp"
+          alt="Portrait of Nhat-Nam Nguyen"
+          width="48"
+          height="48"
+          decoding="async"
+        />
+        <div>
+          <p class="name">{siteProfile.name}</p>
+          <p class="location">{siteProfile.location}</p>
+        </div>
       </div>
-      <p class="lede">
-        Working on speaker-independent acoustic-to-articulatory inversion of the full vocal tract
-        through speech processing, real-time MRI, and representation learning.
-      </p>
+      <div class="headline-group">
+        <p class="eyebrow">Sound → Representation → Articulation</p>
+        <h1>From sound to shape.</h1>
+        <p class="supporting-heading">{siteProfile.headline}</p>
+      </div>
+      <p class="lede">{siteProfile.biography[0]}</p>
       <div class="button-row">
-        <a class="button" href="/research/">View Research</a>
-        <a class="button secondary" href="/projects/">View Projects</a>
+        <a class="button" href="/research/">Explore my research</a>
+        <a class="button secondary" href="/projects/">View selected projects</a>
         {
           cvPath && (
             <a class="button secondary" href={cvPath}>
-              Download CV
+              View CV
             </a>
           )
         }
       </div>
-      <dl>
-        <div>
-          <dt>Affiliation</dt>
-          <dd>{siteProfile.affiliation}</dd>
-        </div>
-        <div>
-          <dt>Focus</dt>
-          <dd>Speech · vision · medical imaging</dd>
-        </div>
-      </dl>
+      <p class="affiliation">
+        <span>{siteProfile.affiliation}</span>
+        <span>{siteProfile.location}</span>
+      </p>
     </div>
-    <div class="hero-visual" aria-hidden="true">
-      <svg viewBox="0 0 540 540">
-        <g class="grid-lines">
-          <path d="M30 90h480M30 150h480M30 210h480M30 270h480M30 330h480M30 390h480M30 450h480"
-          ></path>
-          <path d="M90 30v480M150 30v480M210 30v480M270 30v480M330 30v480M390 30v480M450 30v480"
-          ></path>
-        </g>
-        <g class="contours">
-          <path
-            d="M321 72c94 13 164 82 170 170 5 74-38 145-106 171-64 25-137 4-165-47-21-39-11-91 27-115 34-21 82-11 98 24 13 28-1 65-31 76-24 9-53-3-60-25"
-          ></path>
-          <path d="M325 105c70 13 123 67 131 132 8 58-21 115-73 141-43 22-93 15-122-16"></path>
-          <path d="M334 141c48 14 82 52 87 98 4 41-15 80-50 100"></path>
-        </g>
-        <path
-          class="wave"
-          d="M42 408c35 0 35-54 70-54s35 108 70 108 35-82 70-82 35 48 70 48 35-22 70-22 35 12 70 12 35-6 70-6"
-        ></path>
-        <circle class="signal" cx="220" cy="366" r="7"></circle>
-        <circle class="point" cx="421" cy="239" r="5"></circle>
-      </svg>
-      <div class="visual-label label-a">acoustic signal</div>
-      <div class="visual-label label-b">articulatory space</div>
-    </div>
+    <SoundToShapeVisual />
   </div>
 </section>
 
 <style>
   .hero {
-    padding-block: clamp(4rem, 9vw, 6.5rem);
+    position: relative;
+    padding-block: clamp(3.5rem, 7vw, 6.75rem);
     overflow: hidden;
+  }
+
+  .hero::before,
+  .hero::after {
+    position: absolute;
+    z-index: -1;
+    content: '';
+    pointer-events: none;
+  }
+
+  .hero::before {
+    top: -18rem;
+    right: -14rem;
+    width: 44rem;
+    height: 44rem;
+    border: 1px solid var(--line);
+    border-radius: 44% 56% 56% 44%;
+    opacity: 0.45;
+    transform: rotate(18deg);
+  }
+
+  .hero::after {
+    right: 2%;
+    bottom: 8%;
+    width: 32rem;
+    height: 8rem;
+    background: repeating-radial-gradient(
+      ellipse at center,
+      transparent 0 8px,
+      var(--line) 9px 10px
+    );
+    opacity: 0.12;
   }
 
   .hero-grid {
@@ -79,134 +94,84 @@ import { cvPath } from '../../utils/cv';
 
   .hero-copy {
     display: grid;
-    gap: 1.5rem;
+    gap: 1.65rem;
+  }
+
+  .researcher-id {
+    display: flex;
+    gap: 0.8rem;
+    align-items: center;
+  }
+
+  .profile-mark {
+    width: 48px;
+    height: 48px;
+    border: 1px solid var(--line-strong);
+    border-radius: 50%;
+    background: var(--paper-raised);
+    object-fit: cover;
   }
 
   .name {
-    margin-bottom: 0.35rem;
+    color: var(--ink);
+    font-weight: 760;
+  }
+
+  .location {
     color: var(--ink-soft);
-    font-size: clamp(1.1rem, 2vw, 1.35rem);
-    font-weight: 650;
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
   }
 
   h1 {
-    max-width: 13ch;
+    max-width: 11ch;
+    font-size: clamp(3.25rem, 8vw, 6.6rem);
+    letter-spacing: -0.065em;
   }
 
-  dl {
+  .headline-group {
     display: grid;
-    gap: 0.85rem;
+    gap: 0.8rem;
+  }
+
+  .supporting-heading {
+    max-width: 38rem;
+    color: var(--ink-soft);
+    font-size: clamp(1.05rem, 2vw, 1.3rem);
+    font-weight: 650;
+    line-height: 1.35;
+  }
+
+  .affiliation {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.25rem 0.8rem;
     padding-top: 1.35rem;
     border-top: 1px solid var(--line);
-  }
-
-  dl > div {
-    display: grid;
-    gap: 0.25rem;
-  }
-
-  dt {
     color: var(--ink-soft);
     font-family: var(--font-mono);
-    font-size: 0.68rem;
-    font-weight: 700;
-    letter-spacing: 0.09em;
-    text-transform: uppercase;
+    font-size: 0.76rem;
   }
 
-  dd {
-    margin: 0;
-    font-size: 0.9rem;
+  .affiliation span + span::before {
+    margin-right: 0.8rem;
+    content: '—';
   }
 
-  .hero-visual {
-    position: relative;
-    width: min(100%, 34rem);
-    margin-inline: auto;
-    border: 1px solid var(--line);
-    border-radius: 50%;
-    background: color-mix(in srgb, var(--paper-raised) 80%, transparent);
-    box-shadow: var(--shadow);
-  }
-
-  .hero-visual::before {
-    position: absolute;
-    inset: 8%;
-    border: 1px dashed var(--line-strong);
-    border-radius: 50%;
-    content: '';
-  }
-
-  .hero-visual svg {
-    position: relative;
-    z-index: 1;
-  }
-
-  .grid-lines,
-  .contours,
-  .wave {
-    fill: none;
-    vector-effect: non-scaling-stroke;
-  }
-
-  .grid-lines {
-    stroke: var(--line);
-    stroke-width: 1;
-    opacity: 0.52;
-  }
-
-  .contours {
-    stroke: var(--ink);
-    stroke-linecap: round;
-    stroke-width: 2;
-  }
-
-  .wave {
-    stroke: var(--accent);
-    stroke-linecap: round;
-    stroke-width: 4;
-  }
-
-  .signal {
-    fill: var(--signal);
-  }
-
-  .point {
-    fill: var(--accent);
-  }
-
-  .visual-label {
-    position: absolute;
-    z-index: 2;
-    padding: 0.35rem 0.55rem;
-    border: 1px solid var(--line);
-    border-radius: 4px;
-    background: var(--paper-raised);
-    color: var(--ink-soft);
-    font-family: var(--font-mono);
-    font-size: 0.65rem;
-  }
-
-  .label-a {
-    bottom: 10%;
-    left: -2%;
-  }
-
-  .label-b {
-    top: 17%;
-    right: -2%;
-  }
-
-  @media (min-width: 42rem) {
-    dl {
-      grid-template-columns: repeat(2, minmax(0, 1fr));
+  @media (min-width: 62rem) {
+    .hero-grid {
+      grid-template-columns: minmax(0, 0.93fr) minmax(31rem, 1.07fr);
+      gap: clamp(3rem, 6vw, 6rem);
     }
   }
 
-  @media (min-width: 58rem) {
-    .hero-grid {
-      grid-template-columns: minmax(0, 1.08fr) minmax(22rem, 0.82fr);
-      gap: clamp(3rem, 7vw, 7rem);
+  @media (max-width: 35rem) {
+    .affiliation {
+      display: grid;
+    }
+
+    .affiliation span + span::before {
+      content: none;
     }
   }
 </style>

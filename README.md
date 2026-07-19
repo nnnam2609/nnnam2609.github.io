@@ -1,292 +1,207 @@
-# Nhat-Nam Nguyen — personal website
+# Nhat-Nam Nguyen — scientific editorial portfolio
 
-A static research website for Nhat-Nam Nguyen built around the concept **From Sound to Shape**. The
-homepage connects speech, learned representations, real-time MRI, and vocal-tract articulation with
-original SVG line work, restrained motion, and progressive enhancement. It uses Astro, strict
-TypeScript, and content collections.
+A static Astro research portfolio built around **From Sound to Shape**. The homepage presents
+Nhat-Nam Nguyen’s work in speech processing, real-time MRI, anatomical normalization, and
+acoustic-to-articulatory inversion as an editorial research report rather than a product landing
+page or developer dashboard.
 
-> [!NOTE]
-> **Production target:** this is the GitHub user site for `nnnam2609`, published from
-> `nnnam2609/nnnam2609.github.io` at `https://nnnam2609.github.io`. Astro uses that canonical URL with
-> no repository base path.
+Production: [https://nnnam2609.github.io](https://nnnam2609.github.io)
 
-## Homepage concept
+## Stack
 
-The homepage follows one visual and narrative sequence:
+- Astro 7 static output with strict TypeScript
+- Schema-validated Astro content collections
+- Plain component-scoped CSS and centralized design tokens
+- Local system font stacks and original SVG research figures
+- npm with the committed `package-lock.json`
+- GitHub Actions deployment to GitHub Pages
 
-```text
-Sound → Representation → Articulation
-```
+There is no UI framework, CSS framework, client application runtime, analytics package, external
+font request, animation library, CMS, or image CDN.
 
-- `src/components/home/SoundToShapeVisual.astro` contains the animated waveform, latent blocks, and
-  vocal-tract contour used in the hero.
-- `src/components/home/ResearchPipeline.astro` presents Observe, Understand, and Reconstruct as a
-  scroll-linked research story.
-- `src/components/home/ProjectVisual.astro` gives each verified featured project its own SVG diagram.
-- `src/components/home/ResearchThemes.astro` presents the research map as lightweight theme cards.
-- `src/components/layout/CommandPalette.astro` provides `Ctrl/Cmd + K` navigation without a library.
-- `src/data/home.ts` stores homepage topics, pipeline copy, research themes, and the motion switch.
-- `src/data/site.ts` remains the single source for profile, contact, affiliation, and social data.
+## Run locally
 
-The design uses system fonts, local SVG assets, CSS design tokens, and no external font or image CDN.
-Dark mode follows the operating-system preference until the visitor makes a saved manual choice.
-
-## Technology choices
-
-- Astro static site generation for fast, durable HTML with minimal browser JavaScript
-- Strict TypeScript and schema-validated Astro content collections
-- Plain global and component-scoped CSS using a system font stack
-- Astro Sitemap for generated sitemap metadata
-- Prettier with the official Astro plugin
-- GitHub Actions and the official Astro Pages deployment action
-- npm with a committed lockfile
-
-The site deliberately has no UI framework, CSS framework, database, CMS, server runtime, analytics,
-animation library, or external font dependency. No dependency was added for the homepage redesign.
-
-## Local development
-
-Use Node.js 24 (see `.nvmrc`) and npm.
+Use Node.js 24 and npm:
 
 ```bash
 npm install
 npm run dev
 ```
 
-The development server prints its local URL. Other commands:
+Validation commands:
 
 ```bash
-npm run build          # Generate the production site in dist/
-npm run preview        # Preview the generated site locally
-npm run check          # Run Astro and TypeScript checks
-npm run format         # Format supported files
-npm run format:check   # Verify formatting without writing
+npm run check
+npm run format:check
+npm run build
+npm run preview
 ```
 
-Before opening a pull request, run `npm run check`, `npm run format:check`, and `npm run build`.
+`npm run build` writes the static site to `dist/`.
 
-## Content architecture
+## Homepage architecture
 
-General profile details live in `src/data/site.ts`. Research, project, publication, and note entries
-live under `src/content/`; their required fields are enforced by `src/content.config.ts`. Invalid
-frontmatter fails the build.
+The homepage route is `src/pages/index.astro`. It renders:
 
-Homepage-only editorial data lives in `src/data/home.ts`. Set `homeOptions.enableMotion` to `false`
-to keep the static contour state and disable the homepage motion layer. The system-level
-`prefers-reduced-motion` setting always overrides motion automatically.
-
-Optional values should be omitted until verified. The templates hide missing links, images, dates,
-contact fields, publication sections, and the PDF CV button. Never use `href="#"` as a placeholder.
-
-### Add a research topic
-
-Create `src/content/research/<slug>.md`:
-
-```yaml
----
-title: <verified research theme>
-description: <short, factual description>
-status: <current status>
-methods:
-  - <method>
-relatedProjects: []
-relatedPublications: []
-order: 6
----
+```text
+EditorialHero
+ResearchList
+CurrentWork
+SelectedProjects
+ShortBio
 ```
 
-Optional fields are `image` and `externalUrl`. Related project and publication values are display
-labels, not inferred links.
+Homepage-only copy lives in `src/data/home.ts`. Profile, affiliation, contact, social, navigation,
+and SEO description values live in `src/data/site.ts`. Project summaries are validated content
+entries in `src/content/projects/`.
 
-### Add a project
+The previous animated hero, pipeline, card-grid sections, latest-notes block, and command palette
+files are intentionally retained but are not rendered by the homepage. See
+`docs/homepage-design.md` for the audit and design rationale.
+
+## Edit homepage content
+
+Update `src/data/home.ts` for:
+
+- hero introduction and supporting sentence;
+- selected research titles, summaries, and methods;
+- current-work statements;
+- short biography copy;
+- hero figure caption metadata.
+
+Keep unknown fields out rather than adding placeholders or fabricated links.
+
+## Change the hero visual
+
+Edit `src/components/home/ResearchFigure.astro`. The current figure is an original SVG containing an
+abstract vocal-tract contour, landmarks, coordinate lines, and a waveform. Preserve:
+
+- the SVG `title` and `desc`;
+- the factual caption identifying it as abstract;
+- the responsive view box;
+- the absence of participant identifiers and unverified metrics.
+
+If replacing it with a real research image, first document file-specific publication permission and
+privacy review in `docs/asset-sources.md`. Do not publish a candidate merely because it is available
+on the workstation.
+
+## Change the profile image
+
+The biography uses `public/profile-nhat-nam.webp`. To replace it:
+
+1. Confirm the image shows the correct person and is approved for publication.
+2. Copy the source into a safe working location; never modify the original.
+3. Apply orientation, crop, resize, metadata removal, and WebP/AVIF conversion only to the copy.
+4. Put the optimized copy under `public/` with explicit width/height in the component.
+5. Update the alt text and `docs/asset-sources.md`.
+
+The portrait should remain a small biography image, not a large circular hero avatar.
+
+## Add or update a project
 
 Create `src/content/projects/<slug>.md`:
 
 ```yaml
 ---
 name: <verified project name>
-summary: <factual summary>
+summary: <factual one-sentence summary>
 type: research # research or software
-status: <current status>
-technologies: []
+status: <verified current status>
+technologies:
+  - <method>
 featured: false
-order: 6
+order: 4
 ---
 ```
 
-Optional fields are `repositoryUrl`, `demoUrl`, `startYear`, `endYear`, and `image`. Add a link only
-after verifying that it is public and owned by, or clearly associated with, Nhat-Nam Nguyen.
+Optional fields are `repositoryUrl`, `demoUrl`, `startYear`, `endYear`, and `image`. Set `featured:
+true` only when the project should be considered for the homepage; the page still renders at most
+three projects. Repository and demo links are hidden unless a verified URL exists.
 
-### Add a publication or talk
+## Add research, publications, or notes
 
-Create `src/content/publications/<slug>.md` with verified bibliographic data:
+Collection schemas live in `src/content.config.ts`:
 
-```yaml
----
-title: <verified title>
-authors:
-  - <author as published>
-venue: <verified venue>
-year: 2026
-type: conference # journal, conference, workshop, preprint, thesis, or talk
-featured: false
----
+- `src/content/research/` contains research directions.
+- `src/content/projects/` contains research and software projects.
+- `src/content/publications/` accepts verified bibliographic entries.
+- `src/content/notes/` accepts Markdown notes; drafts are excluded from public lists and routes.
+
+Invalid frontmatter fails the build. Publication pages remain honest empty states until verified
+entries exist.
+
+## Add the CV
+
+Place the verified public document at `public/cv.pdf`. The helper in `src/utils/cv.ts` detects it at
+build time; the hero and CV page render PDF links only when the file exists.
+
+Several local PDF candidates may exist. Do not copy one until the intended current public version is
+confirmed.
+
+## Navigation and contact
+
+Navigation and verified optional contact/social values are maintained in `src/data/site.ts`.
+Optional values are omitted from HTML and Person JSON-LD when absent. Do not use `href="#"`.
+
+## Design tokens and themes
+
+`src/styles/tokens.css` defines the canonical palette:
+
+```css
+--color-background
+--color-surface
+--color-text
+--color-muted
+--color-accent
+--color-signal
+--color-line
 ```
 
-Optional fields are `doi`, `paperUrl`, `codeUrl`, `slidesUrl`, and `abstract`. The publications page
-shows a neutral update notice while the collection is empty. Home and CV publication sections remain
-hidden until data exists.
+It also defines the display, body, and metadata font stacks. Light and dark palettes are designed
+separately. The site contains no gradient text, neon glow, or glassmorphism.
 
-### Write and publish a note
+## Accessibility and performance
 
-Create `src/content/notes/<slug>.md`:
+The site includes a skip link, semantic heading order, visible focus, `aria-current`, native mobile
+navigation, explicit image dimensions, descriptive alt text, meaningful SVG metadata, lazy loading
+below the fold, and global reduced-motion handling.
 
-```yaml
----
-title: <note title>
-description: <one-sentence summary>
-publishedAt: 2026-07-18
-tags: []
-draft: true
----
-Write the note in Markdown here.
-```
+The editorial homepage adds no client-side JavaScript. Browser validation covers six responsive
+viewports, mobile navigation, dark mode, reduced motion, horizontal overflow, console/request errors,
+images, placeholder links, and local production paths.
 
-Optional fields are `updatedAt`, `readingTime`, and `canonicalUrl`. Drafts are excluded from both local
-lists and production routes. Change `draft` to `false` only when the note is ready to publish. Restart
-the development server after adding the first entry to a previously empty collection so its file
-watcher is initialized.
+## Asset provenance
 
-### Add the CV PDF
+`docs/asset-sources.md` records the two approved read-only search roots using aliases, candidates
+reviewed, assets used, processing decisions, privacy concerns, and the source-integrity confirmation.
+No external MRI, grid, segmentation, or prediction result is currently published by the homepage.
 
-Place the verified document at `public/cv.pdf`. The home hero and web CV page detect that file at
-build time and add download buttons automatically. When the file is absent, the PDF controls stay
-hidden. The web CV renders only sections backed by current data; education, experience, talks,
-skills, and languages are intentionally absent until verified information is supplied.
+## Deploy to GitHub Pages
 
-### Update the profile photograph
+`.github/workflows/deploy.yml` builds with npm and deploys only on pushes to `main` or manual
+`workflow_dispatch`.
 
-The hero uses `public/profile-nhat-nam.webp`, an optimized copy of the user-verified `avatar.jpg`.
-To update it, create a metadata-free WebP or AVIF copy under `public/`, keep a square aspect ratio,
-update the image path and alt text in `src/components/home/Hero.astro` if the filename changes, and
-leave the source photograph unchanged.
+Normal workflow:
 
-### Change the hero visual
+1. Create a feature branch from current `origin/main`.
+2. Run check, formatting, production build, and browser validation.
+3. Push the branch and open a pull request targeting `main`.
+4. Review asset permissions, personal data, screenshots, and generated HTML.
+5. Merge only after review; the Pages workflow then deploys production.
 
-Edit `src/components/home/SoundToShapeVisual.astro`. Keep the SVG view box stable, preserve the
-static contour shown by the reduced-motion rules, and avoid inserting literal model diagrams or
-claims that are not supported by public research material. The color system is centralized in
-`src/styles/tokens.css`.
-
-### Configure contact and social links
-
-Set verified optional values in `src/data/site.ts`:
-
-```ts
-email: 'nhat-nam.nguyen@loria.fr',
-personalEmail: 'nnnam2609@gmail.com',
-github: 'https://github.com/nnnam2609',
-linkedin: 'https://www.linkedin.com/in/nguyennhatnam2609/',
-scholar: 'https://scholar.google.com/...',
-orcid: 'https://orcid.org/...',
-```
-
-Empty fields are not rendered and are not included in JSON-LD structured data.
-
-## Local assets and validation evidence
-
-The verified profile photograph is included as an optimized WebP. No external research image,
-dataset sample, or local CV was copied into the site. General MRI publication permission is recorded,
-but each candidate still requires privacy review; grid and segmentation assets are not authorized.
-Asset decisions and reviewed candidates are recorded in `docs/asset-sources.md`. Design, animation,
-mobile, accessibility, and performance decisions are recorded in `docs/homepage-design.md`.
-
-Browser-validation screenshots are stored in `docs/validation/`; they are documentation files and
-are not shipped by Astro because only `public/` becomes static site assets.
-
-## GitHub Pages deployment
-
-The workflow at `.github/workflows/deploy.yml` follows the current official Astro Pages pattern:
-
-1. Check out the repository.
-2. Let `withastro/action` detect the npm lockfile, install dependencies, build the static site, and
-   upload the Pages artifact.
-3. Deploy the artifact with `actions/deploy-pages`.
-
-It runs on pushes to `main` and can be launched manually with `workflow_dispatch`. Permissions are
-limited to reading repository contents and writing a verified Pages deployment. Concurrency allows an
-in-progress production deployment to finish before a later deployment starts.
-
-One-time repository setup:
-
-1. Open **Settings → Pages** in `nnnam2609/nnnam2609.github.io`.
-2. Under **Build and deployment → Source**, select **GitHub Actions**.
-3. Merge a reviewed change to `main` or run the workflow manually.
-4. Confirm the deployment reports the same URL configured in `astro.config.mjs`.
-
-The site configuration is:
+This repository is a root GitHub user site, so `astro.config.mjs` sets:
 
 ```js
 site: 'https://nnnam2609.github.io';
 ```
 
-There is no `base` because this is designed as a root GitHub user site.
+No repository `base` path is required.
 
-## Custom-domain migration
+## Information still requiring verification
 
-To move to a verified custom domain later:
-
-1. Configure the domain's DNS records according to GitHub Pages documentation.
-2. Add `public/CNAME` containing only the custom hostname.
-3. Change `site` in `astro.config.mjs` to the canonical `https://` custom-domain URL.
-4. Change the sitemap URL in `public/robots.txt` to the same host.
-5. Keep `base` unset.
-6. Configure the custom domain and HTTPS enforcement in **Settings → Pages**.
-7. Rebuild and verify canonical, Open Graph, sitemap, and redirect behavior.
-
-## Accessibility and privacy
-
-The site uses semantic landmarks, a skip link, visible keyboard focus, a native keyboard-operable
-mobile navigation, `aria-current`, large touch targets, reduced-motion support, responsive wrapping,
-and a local theme preference. The main content and navigation remain available without JavaScript;
-only theme persistence requires it. No visitor data is collected.
-
-## Troubleshooting
-
-### Links or assets point at the wrong Pages path
-
-Confirm the repository owner and name. This code is intentionally configured only for the root URL
-`https://nnnam2609.github.io` from `nnnam2609/nnnam2609.github.io`. Do not add a repository base path
-for this user-site deployment.
-
-### A content build fails
-
-Read the schema error, then compare the entry with `src/content.config.ts`. Dates must be valid,
-external links must be full URLs, project types and publication types must match an allowed value, and
-required strings cannot be empty.
-
-### A draft note appears locally but not after deployment
-
-This is expected. Set `draft: false` when the note is approved for publication.
-
-### The CV button does not appear
-
-Check that the filename is exactly `public/cv.pdf`, including lowercase letters, then rebuild.
-
-### Pages deployment fails
-
-Confirm that GitHub Actions is selected as the Pages source, the lockfile is committed, Actions are
-enabled, and the workflow has access to the `github-pages` environment. Review both the `build` and
-`deploy` job logs.
-
-## Information still required
-
-- [x] Email — LORIA and personal
-- [x] GitHub profile URL — `https://github.com/nnnam2609`
-- [x] LinkedIn URL — `https://www.linkedin.com/in/nguyennhatnam2609/`
-- [ ] Google Scholar URL — not available yet
-- [ ] ORCID — not available yet
-- [x] Profile photograph and publication permission
-- [ ] CV PDF
-- [ ] Verified publication list — coming soon
-- [ ] Verified project repository links — repositories are not public yet
+- Current public CV PDF
+- Google Scholar URL
+- ORCID
+- Verified publication list
+- Public project repository/demo URLs
+- File-specific publication permission for any future MRI, grid, segmentation, or prediction visual

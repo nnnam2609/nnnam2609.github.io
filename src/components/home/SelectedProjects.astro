@@ -1,0 +1,244 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import ProjectVisual from './ProjectVisual.astro';
+
+interface Props {
+  projects: CollectionEntry<'projects'>[];
+}
+
+const { projects } = Astro.props;
+---
+
+<section class="editorial-section projects-section" aria-labelledby="selected-projects-title">
+  <div class="container">
+    <header class="projects-header">
+      <div>
+        <p class="section-label">03 / Selected projects</p>
+        <h2 id="selected-projects-title">Research in progress.</h2>
+      </div>
+      <a href="/projects/">View all projects <span aria-hidden="true">→</span></a>
+    </header>
+
+    <div class="project-list">
+      {
+        projects.slice(0, 3).map((project, index) => {
+          const { data } = project;
+          return (
+            <article class:list={['featured-project', { reverse: index % 2 === 1 }]}>
+              <figure>
+                <ProjectVisual projectId={project.id} />
+                <figcaption>
+                  <span>PLATE {String(index + 1).padStart(2, '0')}</span>
+                  <span>{data.name}</span>
+                </figcaption>
+              </figure>
+              <div class="project-copy">
+                <p class="project-number">Project {String(index + 1).padStart(2, '0')}</p>
+                <h3>{data.name}</h3>
+                <p>{data.summary}</p>
+                <dl>
+                  <div>
+                    <dt>Type</dt>
+                    <dd>{data.type}</dd>
+                  </div>
+                  <div>
+                    <dt>Focus</dt>
+                    <dd>{data.technologies.join(' · ')}</dd>
+                  </div>
+                  <div>
+                    <dt>Status</dt>
+                    <dd>{data.status}</dd>
+                  </div>
+                </dl>
+                {(data.repositoryUrl || data.demoUrl) && (
+                  <div class="project-links">
+                    {data.repositoryUrl && <a href={data.repositoryUrl}>Repository →</a>}
+                    {data.demoUrl && <a href={data.demoUrl}>Demo →</a>}
+                  </div>
+                )}
+              </div>
+            </article>
+          );
+        })
+      }
+    </div>
+  </div>
+</section>
+
+<style>
+  .projects-header {
+    display: grid;
+    padding-bottom: clamp(2.5rem, 6vw, 5rem);
+    gap: 1.5rem;
+    border-bottom: 1px solid var(--color-line-strong);
+  }
+
+  .projects-header > div {
+    display: grid;
+    gap: 0.8rem;
+  }
+
+  .section-label,
+  .project-number,
+  dt,
+  figcaption {
+    font-family: var(--font-mono);
+    font-size: 0.68rem;
+    font-weight: 700;
+    letter-spacing: 0.09em;
+    text-transform: uppercase;
+  }
+
+  .section-label,
+  .project-number {
+    color: var(--color-accent);
+  }
+
+  h2 {
+    font-family: var(--font-display);
+    font-size: clamp(2.7rem, 6vw, 5.8rem);
+    font-weight: 500;
+    letter-spacing: -0.05em;
+    line-height: 0.98;
+  }
+
+  .projects-header > a,
+  .project-links a {
+    display: inline-flex;
+    width: max-content;
+    min-height: 44px;
+    gap: 0.45rem;
+    align-items: center;
+    color: var(--color-text);
+    font-weight: 700;
+    text-decoration: none;
+  }
+
+  .projects-header > a span {
+    color: var(--color-accent);
+  }
+
+  .project-list {
+    display: grid;
+  }
+
+  .featured-project {
+    display: grid;
+    padding-block: clamp(3rem, 8vw, 7rem);
+    gap: 2rem;
+    border-bottom: 1px solid var(--color-line-strong);
+  }
+
+  figure {
+    min-width: 0;
+    margin: 0;
+    border-top: 1px solid var(--color-line);
+  }
+
+  figure :global(.project-visual) {
+    min-height: 13rem;
+    border-bottom-color: var(--color-line);
+    background-color: var(--color-surface);
+  }
+
+  figure :global(.project-visual svg) {
+    min-height: 13rem;
+  }
+
+  figcaption {
+    display: flex;
+    padding-top: 0.75rem;
+    gap: 0.6rem 1.2rem;
+    justify-content: space-between;
+    color: var(--color-muted);
+  }
+
+  .project-copy {
+    display: grid;
+    align-content: center;
+    gap: 1rem;
+  }
+
+  h3 {
+    max-width: 16ch;
+    font-family: var(--font-display);
+    font-size: clamp(2rem, 4vw, 3.7rem);
+    font-weight: 500;
+    letter-spacing: -0.04em;
+    line-height: 1;
+  }
+
+  .project-copy > p:not(.project-number) {
+    max-width: 36rem;
+    color: var(--color-muted);
+  }
+
+  dl {
+    display: grid;
+    margin: 0;
+    border-top: 1px solid var(--color-line);
+  }
+
+  dl div {
+    display: grid;
+    padding-block: 0.65rem;
+    gap: 0.35rem;
+    border-bottom: 1px solid var(--color-line);
+  }
+
+  dt {
+    color: var(--color-muted);
+  }
+
+  dd {
+    margin: 0;
+    color: var(--color-text);
+    font-size: 0.82rem;
+    text-transform: capitalize;
+  }
+
+  .project-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem 1rem;
+  }
+
+  .project-links a {
+    font-size: 0.84rem;
+  }
+
+  @media (min-width: 54rem) {
+    .projects-header {
+      grid-template-columns: minmax(0, 4fr) auto;
+      align-items: end;
+    }
+
+    .featured-project {
+      grid-template-columns: repeat(12, minmax(0, 1fr));
+      gap: clamp(2rem, 5vw, 5rem);
+      align-items: center;
+    }
+
+    figure {
+      grid-column: 1 / 8;
+    }
+
+    .project-copy {
+      grid-column: 8 / 13;
+    }
+
+    .featured-project.reverse figure {
+      grid-column: 6 / 13;
+      grid-row: 1;
+    }
+
+    .featured-project.reverse .project-copy {
+      grid-column: 1 / 6;
+      grid-row: 1;
+    }
+
+    dl div {
+      grid-template-columns: 5.5rem 1fr;
+    }
+  }
+</style>

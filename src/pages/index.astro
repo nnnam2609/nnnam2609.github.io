@@ -1,110 +1,23 @@
 ---
 import { getCollection } from 'astro:content';
-import CurrentlyExploring from '../components/home/CurrentlyExploring.astro';
-import FeaturedProjects from '../components/home/FeaturedProjects.astro';
-import Hero from '../components/home/Hero.astro';
-import LatestNotes from '../components/home/LatestNotes.astro';
-import ResearchPipeline from '../components/home/ResearchPipeline.astro';
-import ResearchThemes from '../components/home/ResearchThemes.astro';
-import { siteDescription, siteProfile } from '../data/site';
+import CurrentWork from '../components/home/CurrentWork.astro';
+import EditorialHero from '../components/home/EditorialHero.astro';
+import ResearchList from '../components/home/ResearchList.astro';
+import SelectedProjects from '../components/home/SelectedProjects.astro';
+import ShortBio from '../components/home/ShortBio.astro';
+import { siteDescription } from '../data/site';
 import BaseLayout from '../layouts/BaseLayout.astro';
-import { getPublishedNotes } from '../utils/collections';
 
 const featuredProjects = (await getCollection('projects'))
   .filter(({ data }) => data.featured)
-  .sort((a, b) => a.data.order - b.data.order);
-const latestNotes = (await getPublishedNotes())
-  .sort((a, b) => b.data.publishedAt.valueOf() - a.data.publishedAt.valueOf())
+  .sort((a, b) => a.data.order - b.data.order)
   .slice(0, 3);
-const contactLinks = [
-  siteProfile.email && { href: `mailto:${siteProfile.email}`, label: 'Email at LORIA' },
-  siteProfile.personalEmail && {
-    href: `mailto:${siteProfile.personalEmail}`,
-    label: 'Personal email',
-  },
-  siteProfile.github && { href: siteProfile.github, label: 'GitHub profile' },
-  siteProfile.linkedin && { href: siteProfile.linkedin, label: 'LinkedIn profile' },
-].filter(Boolean) as { href: string; label: string }[];
 ---
 
 <BaseLayout description={siteDescription}>
-  <Hero />
-  <CurrentlyExploring />
-  <ResearchPipeline />
-  <FeaturedProjects projects={featuredProjects} />
-  <ResearchThemes />
-  <LatestNotes notes={latestNotes} />
-
-  <section class="section contact" aria-labelledby="contact-title">
-    <div class="container contact-inner">
-      <div>
-        <p class="eyebrow">Contact</p>
-        <h2 id="contact-title">Let’s talk about speech, images, and articulation.</h2>
-      </div>
-      <div class="contact-copy">
-        {
-          contactLinks.length > 0 ? (
-            <>
-              <p>Use one of these verified channels to get in touch.</p>
-              <div class="button-row">
-                {contactLinks.map(({ href, label }) => (
-                  <a class="button secondary" href={href}>
-                    {label}
-                  </a>
-                ))}
-              </div>
-            </>
-          ) : (
-            <p>
-              Verified contact links are being prepared. In the meantime, institutional contact
-              details can be found through {siteProfile.affiliation}.
-            </p>
-          )
-        }
-      </div>
-    </div>
-  </section>
+  <EditorialHero />
+  <ResearchList />
+  <CurrentWork />
+  <SelectedProjects projects={featuredProjects} />
+  <ShortBio />
 </BaseLayout>
-
-<style>
-  .contact-inner {
-    display: grid;
-    gap: 2rem;
-  }
-
-  .contact {
-    background: var(--ink);
-    color: var(--paper-raised);
-  }
-
-  .contact h2 {
-    max-width: 18ch;
-  }
-
-  .contact-copy {
-    display: grid;
-    gap: 1.25rem;
-    max-width: 38rem;
-    color: color-mix(in srgb, var(--paper-raised) 74%, transparent);
-  }
-
-  .contact :global(.eyebrow) {
-    color: color-mix(in srgb, var(--accent) 74%, white);
-  }
-
-  .contact :global(.button.secondary) {
-    border-color: color-mix(in srgb, var(--paper-raised) 55%, transparent);
-    color: var(--paper-raised);
-  }
-
-  .contact :global(.button.secondary:hover) {
-    background: color-mix(in srgb, var(--paper-raised) 12%, transparent);
-  }
-
-  @media (min-width: 48rem) {
-    .contact-inner {
-      grid-template-columns: minmax(16rem, 0.75fr) minmax(24rem, 1.25fr);
-      gap: clamp(3rem, 9vw, 8rem);
-    }
-  }
-</style>

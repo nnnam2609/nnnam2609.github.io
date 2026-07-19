@@ -1,0 +1,98 @@
+---
+import { currentWork } from '../../data/home';
+---
+
+<section class="editorial-section current-section" aria-labelledby="current-work-title">
+  <div class="container current-grid">
+    <header>
+      <p class="section-label">02 / Current work</p>
+      <h2 id="current-work-title">Currently</h2>
+    </header>
+    <ol role="list">
+      {
+        currentWork.map((item, index) => (
+          <li>
+            <span>{String(index + 1).padStart(2, '0')}</span>
+            <p>{item}</p>
+          </li>
+        ))
+      }
+    </ol>
+  </div>
+</section>
+
+<style>
+  .current-section {
+    background: var(--color-text);
+    color: var(--color-background);
+  }
+
+  .current-grid,
+  header,
+  ol,
+  li {
+    display: grid;
+  }
+
+  .current-grid {
+    gap: 2.5rem;
+  }
+
+  header {
+    gap: 0.75rem;
+  }
+
+  .section-label,
+  li span {
+    color: color-mix(in srgb, var(--color-background) 58%, transparent);
+    font-family: var(--font-mono);
+    font-size: 0.68rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+
+  h2 {
+    font-family: var(--font-display);
+    font-size: clamp(3rem, 7vw, 6.5rem);
+    font-style: italic;
+    font-weight: 400;
+    letter-spacing: -0.055em;
+  }
+
+  ol {
+    border-top: 1px solid color-mix(in srgb, var(--color-background) 28%, transparent);
+  }
+
+  li {
+    padding-block: clamp(1.4rem, 3vw, 2.4rem);
+    gap: 0.8rem;
+    border-bottom: 1px solid color-mix(in srgb, var(--color-background) 20%, transparent);
+  }
+
+  li p {
+    max-width: 40ch;
+    font-family: var(--font-display);
+    font-size: clamp(1.35rem, 2.8vw, 2.15rem);
+    line-height: 1.22;
+  }
+
+  @media (min-width: 56rem) {
+    .current-grid {
+      grid-template-columns: repeat(12, minmax(0, 1fr));
+      gap: 2rem;
+    }
+
+    header {
+      grid-column: 1 / 5;
+    }
+
+    ol {
+      grid-column: 5 / 13;
+    }
+
+    li {
+      grid-template-columns: minmax(2rem, 0.6fr) minmax(0, 5fr);
+    }
+  }
+</style>

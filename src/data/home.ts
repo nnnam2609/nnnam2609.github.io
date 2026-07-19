@@ -1,6 +1,51 @@
-export const homeOptions = {
-  enableMotion: true,
+export const heroContent = {
+  titleLines: ['FROM', 'SOUND', 'TO SHAPE'],
+  introduction:
+    'I study whether the motion of the full vocal tract can be reconstructed from speech, including for speakers a model has never seen.',
+  supporting:
+    'My work combines speech processing, computer vision, real-time MRI, anatomical normalization, and self-supervised learning.',
+  figure: {
+    number: '01',
+    title: 'Speaker-normalized vocal-tract contour',
+    note: 'Original abstract line study — no participant data shown.',
+  },
 } as const;
+
+export const researchDirections = [
+  {
+    number: '01',
+    title: 'Speaker-independent acoustic-to-articulatory inversion',
+    summary: 'Reconstructing full vocal-tract motion from speech across speakers.',
+    methods: ['Speech processing', 'Cross-speaker evaluation', 'Real-time MRI'],
+  },
+  {
+    number: '02',
+    title: 'Anatomical normalization',
+    summary: 'Aligning articulatory predictions across different speaker anatomies.',
+    methods: ['Geometric alignment', 'Vocal-tract contours', 'Grid normalization'],
+  },
+  {
+    number: '03',
+    title: 'MRI video representation learning',
+    summary: 'Learning temporal representations from largely unlabelled rtMRI sequences.',
+    methods: ['Computer vision', 'Self-supervised learning', 'Temporal modelling'],
+  },
+] as const;
+
+export const currentWork = [
+  'Testing cross-speaker contour adaptation using a reference-speaker model.',
+  'Evaluating how anatomical normalization affects articulatory prediction errors.',
+  'Exploring self-supervised representations for real-time MRI video.',
+] as const;
+
+export const biography = [
+  'I am a PhD researcher based in Nancy, France, working at Université de Lorraine and LORIA. My research focuses on speaker-independent acoustic-to-articulatory inversion of the full vocal tract. I am particularly interested in how speech, imaging, geometry, and representation learning can be combined to build models that generalize across speakers.',
+  'Alongside my research, I build research software and explore practical AI products.',
+] as const;
+
+// Legacy exports keep the previous, now-unrendered homepage components type-safe while they remain
+// in the repository for reference. The editorial homepage above does not import these values.
+export const homeOptions = { enableMotion: false } as const;
 
 export const explorationItems = [
   { topic: 'Speaker-independent AAI', status: 'Researching' },

@@ -1,21 +1,25 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" role="img" aria-labelledby="title desc">
   <title id="title">From Sound to Shape — Nhat-Nam Nguyen</title>
-  <desc id="desc">A waveform becomes learned representation blocks and a vocal-tract contour.</desc>
-  <rect width="1200" height="630" fill="#f4f2ec"/>
-  <g stroke="#d2dcda" stroke-width="1" opacity=".7">
-    <path d="M0 90h1200M0 180h1200M0 270h1200M0 360h1200M0 450h1200M0 540h1200"/>
-    <path d="M90 0v630M180 0v630M270 0v630M360 0v630M450 0v630M540 0v630M630 0v630M720 0v630M810 0v630M900 0v630M990 0v630M1080 0v630"/>
+  <desc id="desc">Editorial research portfolio cover with a waveform and vocal-tract contour.</desc>
+  <rect width="1200" height="630" fill="#f3f0e8"/>
+  <path d="M54 54H1146M54 576H1146" stroke="#a8aaa1"/>
+  <text x="62" y="88" fill="#1f625d" font-family="ui-monospace, monospace" font-size="15" font-weight="700" letter-spacing="3">NHAT-NAM NGUYEN / RESEARCH PORTFOLIO</text>
+  <g fill="#18221f" font-family="Georgia, 'Times New Roman', serif" font-size="126" font-weight="500" letter-spacing="-8">
+    <text x="58" y="232">FROM</text>
+    <text x="58" y="352">SOUND</text>
+    <text x="58" y="472" fill="#1f625d" font-style="italic">TO SHAPE</text>
   </g>
-  <text x="72" y="86" fill="#17646d" font-family="ui-monospace, monospace" font-size="18" font-weight="700" letter-spacing="4">NHAT-NAM NGUYEN · RESEARCH</text>
-  <text x="72" y="196" fill="#102832" font-family="ui-sans-serif, system-ui, sans-serif" font-size="82" font-weight="720" letter-spacing="-4">From sound</text>
-  <text x="72" y="282" fill="#102832" font-family="ui-sans-serif, system-ui, sans-serif" font-size="82" font-weight="720" letter-spacing="-4">to shape.</text>
-  <text x="76" y="346" fill="#526a72" font-family="ui-sans-serif, system-ui, sans-serif" font-size="25">Speech · Computer Vision · Real-time MRI · Articulatory AI</text>
-  <path d="M78 458h22l13-27 15 58 17-98 18 136 18-106 18 69 18-34 18 5 17-24 18 42 18-70 18 101 18-63 18 27h21" fill="none" stroke="#17646d" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
-  <path d="M470 462h54m-16-16 16 16-16 16" fill="none" stroke="#c46443" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
-  <g fill="#34858c" opacity=".82">
-    <rect x="568" y="410" width="30" height="98" rx="6"/><rect x="608" y="434" width="30" height="74" rx="6"/><rect x="648" y="393" width="30" height="115" rx="6"/><rect x="688" y="423" width="30" height="85" rx="6"/>
+  <text x="62" y="546" fill="#626a64" font-family="ui-sans-serif, system-ui, sans-serif" font-size="22">Speech · Vision · Articulation</text>
+  <g transform="translate(690 72)">
+    <g stroke="#d3d2c8" opacity=".9">
+      <path d="M0 70H450M0 140H450M0 210H450M0 280H450M0 350H450M0 420H450"/>
+      <path d="M50 20V470M120 20V470M190 20V470M260 20V470M330 20V470M400 20V470"/>
+    </g>
+    <path d="M125 90c91-62 224-42 291 42 48 61 55 147 19 211-32 57-90 96-148 116-50 18-101 11-130-23-25-29-25-69 0-94 23-24 66-26 91-5 21 18 24 51 4 72-17 18-45 19-65 4" fill="none" stroke="#18221f" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="M148 115c72-41 171-24 217 43 34 49 35 111 3 159" fill="none" stroke="#1f625d" stroke-width="3" stroke-linecap="round" stroke-dasharray="9 10"/>
+    <g fill="#f3f0e8" stroke="#98483f" stroke-width="3">
+      <circle cx="125" cy="90" r="7"/><circle cx="416" cy="132" r="7"/><circle cx="435" cy="343" r="7"/><circle cx="287" cy="459" r="7"/>
+    </g>
+    <path d="M10 500h18l10-18 12 40 13-67 14 94 14-73 14 48 14-24 14 4 13-16 14 30 13-47 14 68 14-42 14 18h20" fill="none" stroke="#1f625d" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
   </g>
-  <path d="M752 462h54m-16-16 16 16-16 16" fill="none" stroke="#c46443" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
-  <path d="M864 385c86-18 155 45 149 112-4 46-35 82-77 99-38 15-80 6-99-25-15-24-7-55 16-69 21-13 48-5 57 16 7 17-2 36-19 42" fill="none" stroke="#102832" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
-  <circle cx="864" cy="385" r="8" fill="#c46443"/><circle cx="1013" cy="497" r="8" fill="#c46443"/>
 </svg>

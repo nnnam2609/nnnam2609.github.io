@@ -7,12 +7,13 @@ interface Props {
 
 const { pathname } = Astro.props;
 const isActive = (href: string) => (href === '/' ? pathname === '/' : pathname.startsWith(href));
+const primaryNavigation = navigation.slice(1);
 ---
 
 <nav class="desktop-nav" aria-label="Primary navigation">
   <ul class="desktop-list" role="list">
     {
-      navigation.map(({ href, label }) => (
+      primaryNavigation.map(({ href, label }) => (
         <li>
           <a href={href} aria-current={isActive(href) ? 'page' : undefined}>
             {label}
@@ -33,7 +34,7 @@ const isActive = (href: string) => (href === '/' ? pathname === '/' : pathname.s
     </summary>
     <ul class="nav-list" role="list">
       {
-        navigation.map(({ href, label }) => (
+        primaryNavigation.map(({ href, label }) => (
           <li>
             <a href={href} aria-current={isActive(href) ? 'page' : undefined}>
               {label}
@@ -70,15 +71,20 @@ const isActive = (href: string) => (href === '/' ? pathname === '/' : pathname.s
   summary {
     display: inline-flex;
     min-height: 44px;
-    padding: 0.5rem 0.7rem;
+    padding: 0.5rem 0;
     gap: 0.45rem;
     align-items: center;
-    border: 1px solid var(--line);
-    border-radius: 7px;
+    border: 0;
+    background: transparent;
+    color: var(--color-text);
     cursor: pointer;
     font-size: 0.85rem;
+    font-family: var(--font-mono);
+    font-size: 0.68rem;
     font-weight: 700;
+    letter-spacing: 0.08em;
     list-style: none;
+    text-transform: uppercase;
   }
 
   summary::-webkit-details-marker {
@@ -105,10 +111,9 @@ const isActive = (href: string) => (href === '/' ? pathname === '/' : pathname.s
     right: 0;
     width: min(17rem, calc(100vw - 2rem));
     padding: 0.5rem;
-    border: 1px solid var(--line);
-    border-radius: 9px;
-    background: var(--paper-raised);
-    box-shadow: var(--shadow);
+    border: 1px solid var(--color-line-strong);
+    background: var(--color-surface);
+    box-shadow: 0 12px 32px rgb(20 29 26 / 12%);
   }
 
   a {
@@ -116,8 +121,7 @@ const isActive = (href: string) => (href === '/' ? pathname === '/' : pathname.s
     min-height: 44px;
     padding: 0.5rem 0.7rem;
     align-items: center;
-    border-radius: 5px;
-    color: var(--ink-soft);
+    color: var(--color-muted);
     font-size: 0.86rem;
     font-weight: 650;
     text-decoration: none;
@@ -125,8 +129,7 @@ const isActive = (href: string) => (href === '/' ? pathname === '/' : pathname.s
 
   a:hover,
   a[aria-current='page'] {
-    background: var(--accent-soft);
-    color: var(--accent-strong);
+    color: var(--color-accent);
   }
 
   @media (min-width: 52rem) {
@@ -140,12 +143,19 @@ const isActive = (href: string) => (href === '/' ? pathname === '/' : pathname.s
 
     .desktop-list {
       display: flex;
-      gap: 0.1rem;
+      gap: clamp(0.25rem, 1vw, 1rem);
     }
 
     a {
       min-height: 40px;
-      padding-inline: 0.58rem;
+      padding-inline: 0.2rem;
+      border-bottom: 1px solid transparent;
+      font-size: 0.78rem;
+      font-weight: 650;
+    }
+
+    a[aria-current='page'] {
+      border-bottom-color: var(--color-accent);
     }
   }
 </style>

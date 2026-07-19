@@ -1,7 +1,6 @@
 ---
 import { siteProfile } from '../../data/site';
 import ThemeToggle from '../ThemeToggle.astro';
-import CommandPalette from './CommandPalette.astro';
 import Navigation from './Navigation.astro';
 
 interface Props {
@@ -13,13 +12,16 @@ const { pathname } = Astro.props;
 
 <header class="site-header">
   <div class="container header-inner">
-    <a class="identity" href="/" aria-label={`${siteProfile.name}, home`}>
-      <span class="monogram" aria-hidden="true">NN</span>
-      <span>{siteProfile.name}</span>
+    <a
+      class="identity"
+      href="/"
+      aria-label={`${siteProfile.name}, home`}
+      aria-current={pathname === '/' ? 'page' : undefined}
+    >
+      <span aria-hidden="true">NN</span>
     </a>
     <div class="header-actions">
       <Navigation {pathname} />
-      <CommandPalette />
       <ThemeToggle />
     </div>
   </div>
@@ -30,14 +32,13 @@ const { pathname } = Astro.props;
     position: sticky;
     z-index: 30;
     top: 0;
-    border-bottom: 1px solid var(--line);
-    background: color-mix(in srgb, var(--paper) 92%, transparent);
-    backdrop-filter: blur(16px);
+    border-bottom: 1px solid var(--color-line);
+    background: var(--color-background);
   }
 
   .header-inner {
     display: flex;
-    min-height: 72px;
+    min-height: 64px;
     gap: 1rem;
     align-items: center;
     justify-content: space-between;
@@ -46,36 +47,22 @@ const { pathname } = Astro.props;
   .identity {
     display: inline-flex;
     min-height: 44px;
-    gap: 0.65rem;
     align-items: center;
-    color: var(--ink);
-    font-size: 0.9rem;
-    font-weight: 750;
+    color: var(--color-text);
+    font-family: var(--font-display);
+    font-size: 1.15rem;
+    font-weight: 600;
+    letter-spacing: -0.04em;
     text-decoration: none;
   }
 
-  .monogram {
-    display: grid;
-    width: 36px;
-    height: 36px;
-    border-radius: 7px;
-    background: var(--ink);
-    color: var(--paper-raised);
-    font-family: var(--font-mono);
-    font-size: 0.72rem;
-    letter-spacing: -0.08em;
-    place-items: center;
+  .identity[aria-current='page'] {
+    color: var(--color-accent);
   }
 
   .header-actions {
     display: flex;
-    gap: 0.5rem;
+    gap: 0.75rem;
     align-items: center;
-  }
-
-  @media (max-width: 30rem) {
-    .identity > span:last-child {
-      display: none;
-    }
   }
 </style>

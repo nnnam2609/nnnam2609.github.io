@@ -1,0 +1,190 @@
+---
+import { heroContent } from '../../data/home';
+---
+
+<figure class="research-figure" aria-labelledby="hero-figure-caption">
+  <div class="figure-plate">
+    <svg
+      viewBox="0 0 760 860"
+      role="img"
+      aria-labelledby="figure-title figure-description"
+      focusable="false"
+    >
+      <title id="figure-title">Abstract vocal-tract contour on an anatomical coordinate grid</title>
+      <desc id="figure-description">
+        Two vocal-tract contour studies, anatomical landmarks, coordinate lines, and a small speech
+        waveform. This is an original abstract illustration and contains no participant data.
+      </desc>
+
+      <g class="coordinate-grid">
+        <path
+          d="M80 70V720M160 70V720M240 70V720M320 70V720M400 70V720M480 70V720M560 70V720M640 70V720"
+        ></path>
+        <path
+          d="M60 110H700M60 190H700M60 270H700M60 350H700M60 430H700M60 510H700M60 590H700M60 670H700"
+        ></path>
+      </g>
+
+      <g class="axis-notes" aria-hidden="true">
+        <text x="58" y="48">SUPERIOR</text>
+        <text x="612" y="742">ANTERIOR</text>
+        <text x="66" y="742">POSTERIOR</text>
+        <path d="M64 60v36m0-36-6 10m6-10 6 10"></path>
+        <path d="M648 728h38m0 0-10-6m10 6-10 6"></path>
+      </g>
+
+      <g class="reference-contour">
+        <path
+          d="M251 143c91-65 236-49 318 40 59 64 74 156 39 234-31 70-97 117-163 147-64 29-130 32-183 3-49-26-79-73-72-120 7-43 42-78 86-84 42-6 85 17 97 53 11 33-10 70-45 79-29 8-62-7-72-34"
+        ></path>
+        <path d="M282 178c67-41 164-31 219 30 43 48 53 116 27 172-20 44-59 78-102 98"></path>
+        <path d="M256 461c21 31 63 46 101 33 35-12 64-42 76-79"></path>
+      </g>
+
+      <g class="comparison-contour">
+        <path d="M262 152c88-55 223-38 296 45 51 58 64 142 33 213-28 62-86 106-149 134"></path>
+      </g>
+
+      <g class="landmarks" aria-hidden="true">
+        <circle cx="251" cy="143" r="6"></circle>
+        <circle cx="569" cy="183" r="6"></circle>
+        <circle cx="608" cy="417" r="6"></circle>
+        <circle cx="445" cy="564" r="6"></circle>
+        <circle cx="373" cy="416" r="6"></circle>
+        <circle cx="256" cy="461" r="6"></circle>
+        <text x="232" y="127">L1</text>
+        <text x="579" y="170">L2</text>
+        <text x="618" y="409">L3</text>
+        <text x="455" y="582">L4</text>
+      </g>
+
+      <g class="waveform" aria-hidden="true">
+        <path
+          d="M70 790h22l11-22 13 48 15-78 16 108 16-84 16 55 16-27 16 4 15-18 16 34 15-54 16 78 16-48 16 21h22"
+        ></path>
+        <text x="505" y="796">ACOUSTIC SIGNAL / t</text>
+      </g>
+
+      <g class="legend" aria-hidden="true">
+        <path d="M492 92h42"></path>
+        <text x="545" y="98">REFERENCE</text>
+        <path class="predicted-key" d="M492 124h42"></path>
+        <text x="545" y="130">ADAPTED</text>
+      </g>
+    </svg>
+  </div>
+  <figcaption id="hero-figure-caption">
+    <span>FIG. {heroContent.figure.number}</span>
+    <strong>{heroContent.figure.title}.</strong>
+    <small>{heroContent.figure.note}</small>
+  </figcaption>
+</figure>
+
+<style>
+  .research-figure {
+    margin: 0;
+  }
+
+  .figure-plate {
+    border-block: 1px solid var(--color-line);
+  }
+
+  svg {
+    width: 100%;
+    color: var(--color-text);
+  }
+
+  path,
+  circle {
+    vector-effect: non-scaling-stroke;
+  }
+
+  .coordinate-grid,
+  .axis-notes path {
+    fill: none;
+    stroke: var(--color-line);
+    stroke-width: 1;
+  }
+
+  .coordinate-grid {
+    opacity: 0.72;
+  }
+
+  .axis-notes text,
+  .landmarks text,
+  .waveform text,
+  .legend text {
+    fill: var(--color-muted);
+    font-family: var(--font-mono);
+    font-size: 12px;
+    letter-spacing: 0.08em;
+  }
+
+  .reference-contour,
+  .comparison-contour,
+  .waveform,
+  .legend path {
+    fill: none;
+    stroke: currentColor;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  .reference-contour {
+    stroke-width: 2.5;
+  }
+
+  .reference-contour path:nth-child(n + 2) {
+    stroke: var(--color-accent);
+    stroke-width: 1.7;
+  }
+
+  .comparison-contour,
+  .legend .predicted-key {
+    stroke: var(--color-accent);
+    stroke-dasharray: 7 7;
+    stroke-width: 1.8;
+  }
+
+  .landmarks circle {
+    fill: var(--color-background);
+    stroke: var(--color-signal);
+    stroke-width: 2;
+  }
+
+  .waveform {
+    stroke: var(--color-accent);
+    stroke-width: 2;
+  }
+
+  .legend path {
+    stroke-width: 2;
+  }
+
+  figcaption {
+    display: grid;
+    padding-top: 0.8rem;
+    gap: 0.2rem 0.7rem;
+    color: var(--color-muted);
+    font-size: 0.76rem;
+    grid-template-columns: auto 1fr;
+  }
+
+  figcaption span {
+    color: var(--color-accent);
+    font-family: var(--font-mono);
+    font-size: 0.66rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+  }
+
+  figcaption strong {
+    color: var(--color-text);
+    font-weight: 650;
+  }
+
+  figcaption small {
+    grid-column: 2;
+    font-size: inherit;
+  }
+</style>

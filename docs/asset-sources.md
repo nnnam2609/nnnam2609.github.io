@@ -1,51 +1,61 @@
 # Homepage asset sources
 
-This file records the provenance review for the **From Sound to Shape** homepage. Paths use the
-aliases `<PhD_A2A>` and `<Downloads>` so the documentation does not expose a workstation username or
-absolute local path.
+This record documents the asset review for the scientific editorial homepage. External workstation
+paths are represented by `<PhD_A2A>` and `<Downloads>`; absolute `C:\...` paths never appear in the
+production UI.
 
 ## Assets used
 
-| Asset                                   | Source                                  | Repository destination                         | Processing                                                                                           | Publication rationale                                                                                 |
-| --------------------------------------- | --------------------------------------- | ---------------------------------------------- | ---------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------- |
-| Hero waveform / latent / contour visual | Original SVG authored for this site     | `src/components/home/SoundToShapeVisual.astro` | Hand-authored responsive SVG; no copied geometry                                                     | Abstract research illustration with no participant data, identifiers, metrics, or third-party artwork |
-| Research pipeline visuals               | Original SVG authored for this site     | `src/components/home/ResearchPipeline.astro`   | Hand-authored line art and CSS state transitions                                                     | Conceptual process diagram, explicitly described as non-literal                                       |
-| Project mini visuals                    | Original SVG authored for this site     | `src/components/home/ProjectVisual.astro`      | Hand-authored SVG variants for the three verified projects                                           | Contains no experimental results or unverified claims                                                 |
-| Research theme visuals                  | Original SVG authored for this site     | `src/components/home/ResearchThemes.astro`     | Hand-authored waveform, contour, and MRI-inspired frame                                              | Abstract and free of research data                                                                    |
-| Profile photograph                      | User-provided `avatar.jpg`              | `public/profile-nhat-nam.webp`                 | EXIF orientation applied, resized to 384×384, converted to WebP, and metadata omitted; no retouching | The user confirmed the identity and permission to publish on 2026-07-18                               |
-| Social preview                          | Original SVG authored for this site     | `public/og-from-sound-to-shape.svg`            | Created at a 1200×630 view box                                                                       | Contains only public profile text and abstract shapes                                                 |
-| Favicon                                 | Existing local SVG, redesigned in place | `public/favicon.svg`                           | Reworked into a waveform/contour mark                                                                | Original vector mark with no external rights dependency                                               |
-| Validation screenshots                  | Local production preview                | `docs/validation/*.png`                        | Browser screenshots at representative viewports/themes                                               | Documentation only; not included in deployed site assets                                              |
+| Asset                   | Source                                     | Repository destination                     | Processing                                                                                   | Reason for use                                                                                                               |
+| ----------------------- | ------------------------------------------ | ------------------------------------------ | -------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------- |
+| Hero vocal-tract figure | Original SVG authored for this redesign    | `src/components/home/ResearchFigure.astro` | Hand-authored responsive paths, coordinate grid, landmarks, waveform, title, and description | Research-specific visual with no participant data, file identifiers, results, or third-party rights                          |
+| Featured-project plates | Existing original site SVGs                | `src/components/home/ProjectVisual.astro`  | Reused as static line figures in a new editorial layout                                      | Closely tied to the three verified project themes without claiming real experimental output                                  |
+| Profile portrait        | Previously verified user-provided portrait | `public/profile-nhat-nam.webp`             | Existing 384×384 metadata-free WebP; CSS crops the repository copy only                      | Existing repository provenance states identity and publication permission were confirmed; used below the fold at small scale |
+| Open Graph cover        | Original SVG authored for this redesign    | `public/og-from-sound-to-shape.svg`        | Rebuilt as a 1200×630 flat-color editorial cover                                             | Contains public profile text and abstract line art only                                                                      |
+| Favicon                 | Original SVG authored for this redesign    | `public/favicon.svg`                       | Reworked as a flat-color `NN` editorial mark                                                 | No external artwork or rights dependency                                                                                     |
 
-The source `avatar.jpg` remains unchanged. Only the optimized repository copy was created. No source
-file was overwritten, renamed, moved, or deleted.
+No new binary research asset was copied into the repository.
 
-## Reviewed but not used
+## Approved read-only search scope
 
-| Candidate                                                                    | Location                                       | Decision                                                                                                                                  |
-| ---------------------------------------------------------------------------- | ---------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------- |
-| Grid annotation images                                                       | `<PhD_A2A>/grid transform/docs/assets/github/` | Not used. The user explicitly did not authorize grid assets for publication.                                                              |
-| Grid/contour overlays and stage visualizations                               | `<PhD_A2A>/grid transform/outputs/`            | Not used. The user explicitly did not authorize grid assets for publication; filenames may also expose speaker/session/frame identifiers. |
-| Segmentation overlays                                                        | `<PhD_A2A>/Preprocess/outputs/`                | Not used. The user explicitly did not authorize segmentation assets for publication.                                                      |
-| Inversion review clips                                                       | `<PhD_A2A>/Inversion_SI/results/`              | Not used. They contain speaker/session identifiers and research frames.                                                                   |
-| `landmarks_grid.png`, `grid_construction.png`, `grid_transform_approach.png` | `<Downloads>/02_PhD_Research/`                 | Not used. Ownership and permission for public reuse were not established.                                                                 |
-| `Nhat-Nam-Nguyen-20260213.pdf`, `Nhat-Nam_Nguyen.pdf`                        | `<Downloads>/`                                 | Possible CV candidates, but not copied because the correct/public version has not been confirmed.                                         |
-| Profile placeholder                                                          | `public/profile-placeholder.svg`               | Retained unchanged because repository files may not be deleted; no longer referenced by the homepage.                                     |
+The targeted filename search on 2026-07-19 covered only:
 
-## Research-asset permission record
+- `<PhD_A2A>`
+- `<Downloads>`
 
-- MRI assets: the user confirmed they may be published. No specific MRI file is included yet; each
-  candidate still needs a per-file privacy and identifier review before a copy enters the repository.
-- Grid assets: not authorized for publication and must not be used.
-- Segmentation assets: not authorized for publication and must not be used.
-- The current MRI-inspired visuals remain original abstract SVGs and do not contain research data.
+It searched the requested image, vector, document, presentation, and video extensions using the
+research keywords AAI/A2A, articulatory, vocal tract, MRI/rtMRI, contour, grid, normalization,
+segmentation, prediction, ground truth, JEPA, waveform, spectrogram, portrait/profile, and CV.
+Dataset-style `Data`, `iadi`, dependency, and Git metadata trees were excluded from selection. No
+credential, environment, browser-profile, token, key, password, or administrative file was sought
+or opened.
 
-## Safety confirmation
+## Candidates reviewed but not used
 
-- The asset search was filename- and metadata-focused within the two explicitly permitted roots.
-- Dataset trees under `Data/` and `iadi/` were not copied or opened for website use.
-- No `.env`, key, credential, token, browser profile, password file, or administrative document was
-  read for the homepage.
-- All files outside the website repository remained read-only and unchanged.
-- The original `avatar.jpg` in the repository root was read only; its optimized WebP copy strips
-  metadata and is the only committed photograph.
+| Candidate category                              | Example alias                                                                                               | Decision                                                                                                                                                     |
+| ----------------------------------------------- | ----------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| Prediction / ground-truth comparison videos     | `<Downloads>/*prediction*ground_truth*.mp4`                                                                 | Not used. Filenames include speaker/session identifiers and public-release permission was not established.                                                   |
+| Grid-normalization panels and comparison videos | `<Downloads>/p7_grid_transform_selected_speakers_*` and `<Downloads>/p7_selected_nonp7_sessions_gridnorm_*` | Not used. They contain research frames and explicit participant/session labels; grid assets are not authorized by the existing repository permission record. |
+| MRI comparison videos and frames                | `<Downloads>/compare_mri*.mp4`, `<Downloads>/*_mri_*.png`, and candidates under `<PhD_A2A>`                 | Not used. General relevance is high, but a file-specific privacy and publication review is still required.                                                   |
+| Segmentation and contour outputs                | `<PhD_A2A>/Preprocess/`, `<PhD_A2A>/Inversion_SI/`, and backup output trees                                 | Not used. These are research outputs with identifiers and unclear public-release status.                                                                     |
+| Presentation figures                            | `<Downloads>/02_PhD_Research/*.pptx` and `<Downloads>/*timeline*.pptx`                                      | Not used. Ownership and publication rights for embedded figures were not established, and small slide text would not serve the editorial layout.             |
+| Research PDFs                                   | `<PhD_A2A>/Workshop/SpeakVar2026/*.pdf` and `<Downloads>/02_PhD_Research/*.pdf`                             | Not used as visual sources. The redesign does not extract or republish figures from papers or drafts.                                                        |
+| CV candidates                                   | `<Downloads>/*CV*.pdf` and previously documented name-specific PDFs                                         | Not copied. Multiple candidates exist and the intended public version is not verified.                                                                       |
+| Untracked repository `avatar.jpg`               | Repository root                                                                                             | Not touched or staged. The already optimized and committed portrait remains the only homepage photograph.                                                    |
+
+## Publication and privacy decision
+
+The visual value of the external MRI/grid/prediction candidates does not outweigh uncertainty about
+participant privacy, identifiers, and publication permission. The redesign therefore follows the
+safe fallback requested by the user: original abstract SVG line work. The SVG is intentionally
+captioned as abstract rather than presented as a paper result.
+
+## Source-integrity confirmation
+
+- No file or directory under `<PhD_A2A>` or `<Downloads>` was modified, renamed, moved, overwritten,
+  or deleted.
+- No source asset was opened for destructive processing.
+- No dataset or large directory was copied into the repository.
+- Existing untracked media and validation files in the website working tree were preserved and are
+  excluded from the redesign commit.
+- No sensitive identifier or external absolute path is included in production assets or UI copy.
